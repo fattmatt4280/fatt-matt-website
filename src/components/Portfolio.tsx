@@ -23,16 +23,6 @@ const portfolioItems = [
     title: "Custom Concepts",
     image: portfolio4,
     description: "Unique artistic visions brought to life"
-  },
-  {
-    title: "Color Work",
-    image: portfolio1,
-    description: "Vibrant and bold color tattoo artistry"
-  },
-  {
-    title: "Cover-Ups",
-    image: portfolio2,
-    description: "Expert transformations of existing tattoos"
   }
 ];
 
@@ -44,7 +34,7 @@ const Portfolio = () => {
           Portfolio
         </h2>
         
-        <div className="grid md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
           {portfolioItems.map((item, index) => (
             <div
               key={index}
