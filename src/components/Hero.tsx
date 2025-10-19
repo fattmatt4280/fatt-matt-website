@@ -1,19 +1,18 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
-import Spline from "@splinetool/react-spline";
 
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Spline 3D Background */}
-      <div className="absolute inset-0 w-full h-full">
-        <Spline
-          scene="https://prod.spline.design/neonorbexample-0235a0e3-3d0d-4dbf-9749-8844892ffa15/scene.splinecode"
-          className="w-full h-full"
-        />
+      {/* Animated Orb Background */}
+      <div className="absolute inset-0 w-full h-full bg-gradient-to-br from-background via-background to-background">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] md:w-[800px] md:h-[800px]">
+          <div className="absolute inset-0 rounded-full bg-gradient-to-r from-primary/30 via-secondary/30 to-accent/30 blur-[100px] animate-pulse" />
+          <div className="absolute inset-0 rounded-full bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 blur-[80px] animate-spin-slow" />
+        </div>
       </div>
       
-      {/* Gradient Overlay - allows pointer events to pass through */}
+      {/* Gradient Overlay */}
       <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-background/80 pointer-events-none" />
       
       {/* Content */}
