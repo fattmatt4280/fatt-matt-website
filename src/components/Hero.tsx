@@ -1,20 +1,20 @@
 import { Button } from "@/components/ui/button";
 import { ArrowDown } from "lucide-react";
+import Spline from "@splinetool/react-spline";
 
 const Hero = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Spline 3D Background */}
       <div className="absolute inset-0 w-full h-full">
-        <iframe
-          src="https://my.spline.design/neonorbexample-0235a0e3-3d0d-4dbf-9749-8844892ffa15/"
-          className="w-full h-full border-0"
-          title="3D Neon Orb Animation"
+        <Spline
+          scene="https://prod.spline.design/neonorbexample-0235a0e3-3d0d-4dbf-9749-8844892ffa15/scene.splinecode"
+          className="w-full h-full"
         />
       </div>
       
-      {/* Gradient Overlay */}
-      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-background/80" />
+      {/* Gradient Overlay - allows pointer events to pass through */}
+      <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/30 to-background/80 pointer-events-none" />
       
       {/* Content */}
       <div className="relative z-10 container mx-auto px-4 text-center animate-fade-in-up">
