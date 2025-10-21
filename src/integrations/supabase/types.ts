@@ -16,32 +16,50 @@ export type Database = {
     Tables: {
       portfolio_items: {
         Row: {
+          artist_name: string | null
           category: string
+          color_type: string | null
           created_at: string | null
           description: string | null
           display_order: number | null
+          duration_hours: number | null
           id: string
           image_url: string
+          notes: string | null
+          placement: string | null
+          size: string | null
           title: string
           updated_at: string | null
         }
         Insert: {
+          artist_name?: string | null
           category: string
+          color_type?: string | null
           created_at?: string | null
           description?: string | null
           display_order?: number | null
+          duration_hours?: number | null
           id?: string
           image_url: string
+          notes?: string | null
+          placement?: string | null
+          size?: string | null
           title: string
           updated_at?: string | null
         }
         Update: {
+          artist_name?: string | null
           category?: string
+          color_type?: string | null
           created_at?: string | null
           description?: string | null
           display_order?: number | null
+          duration_hours?: number | null
           id?: string
           image_url?: string
+          notes?: string | null
+          placement?: string | null
+          size?: string | null
           title?: string
           updated_at?: string | null
         }

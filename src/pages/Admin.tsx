@@ -9,8 +9,9 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import AdminGuard from "@/components/AdminGuard";
-import { LogOut, Save, Plus, Trash2 } from "lucide-react";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { LogOut, Save, Plus, Trash2, Upload, Image as ImageIcon } from "lucide-react";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface SiteContent {
@@ -29,7 +30,28 @@ interface PortfolioItem {
   description: string | null;
   image_url: string;
   display_order: number;
+  artist_name: string | null;
+  duration_hours: number | null;
+  placement: string | null;
+  size: string | null;
+  color_type: string | null;
+  notes: string | null;
 }
+
+const TATTOO_STYLES = [
+  "Black & Grey",
+  "Traditional",
+  "Neo-Traditional",
+  "Realism",
+  "Watercolor",
+  "Japanese",
+  "Tribal",
+  "Geometric",
+  "Minimalist",
+  "Portraits",
+  "Cover-Ups",
+  "Custom/Other",
+] as const;
 
 const Admin = () => {
   const navigate = useNavigate();
@@ -37,7 +59,9 @@ const Admin = () => {
   const [loading, setLoading] = useState(false);
   const [siteContent, setSiteContent] = useState<SiteContent[]>([]);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
-  const [selectedContent, setSelectedContent] = useState<SiteContent | null>(null);
+  const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null);
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const [dialogOpen, setDialogOpen] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -95,20 +119,96 @@ const Admin = () => {
     }
   };
 
+  const handleImageUpload = async (file: File, itemId: string) => {
+    if (!file) return;
+
+    // Validate file
+    if (file.size > 5 * 1024 * 1024) {
+      toast({
+        title: "Error",
+        description: "File size must be less than 5MB",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      toast({
+        title: "Error",
+        description: "File must be an image",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setUploadingImage(true);
+    try {
+      const fileExt = file.name.split(".").pop();
+      const fileName = `${itemId}-${Date.now()}.${fileExt}`;
+      const filePath = `${fileName}`;
+
+      // Upload to storage
+      const { error: uploadError } = await supabase.storage
+        .from("portfolio-images")
+        .upload(filePath, file, { upsert: true });
+
+      if (uploadError) throw uploadError;
+
+      // Get public URL
+      const { data: { publicUrl } } = supabase.storage
+        .from("portfolio-images")
+        .getPublicUrl(filePath);
+
+      // Update the item with new image URL
+      const { error: updateError } = await supabase
+        .from("portfolio_items")
+        .update({ image_url: publicUrl })
+        .eq("id", itemId);
+
+      if (updateError) throw updateError;
+
+      toast({
+        title: "Success",
+        description: "Image uploaded successfully",
+      });
+
+      fetchData();
+      if (editingItem && editingItem.id === itemId) {
+        setEditingItem({ ...editingItem, image_url: publicUrl });
+      }
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
   const handleAddPortfolioItem = async () => {
     const newItem = {
-      category: "black-grey",
+      category: "Black & Grey",
       title: "New Portfolio Item",
-      description: "Description",
+      description: "Add description here",
       image_url: "https://placehold.co/600x400",
       display_order: portfolioItems.length,
+      artist_name: null,
+      duration_hours: null,
+      placement: null,
+      size: null,
+      color_type: null,
+      notes: null,
     };
 
     setLoading(true);
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("portfolio_items")
-        .insert(newItem);
+        .insert([newItem])
+        .select()
+        .single();
 
       if (error) throw error;
 
@@ -118,6 +218,10 @@ const Admin = () => {
       });
       
       fetchData();
+      if (data) {
+        setEditingItem(data);
+        setDialogOpen(true);
+      }
     } catch (error: any) {
       toast({
         title: "Error",
@@ -130,6 +234,16 @@ const Admin = () => {
   };
 
   const handleUpdatePortfolioItem = async (item: PortfolioItem) => {
+    // Validate required fields
+    if (!item.title || !item.category) {
+      toast({
+        title: "Validation Error",
+        description: "Title and style are required",
+        variant: "destructive",
+      });
+      return;
+    }
+
     setLoading(true);
     try {
       const { error } = await supabase
@@ -140,6 +254,12 @@ const Admin = () => {
           description: item.description,
           image_url: item.image_url,
           display_order: item.display_order,
+          artist_name: item.artist_name,
+          duration_hours: item.duration_hours,
+          placement: item.placement,
+          size: item.size,
+          color_type: item.color_type,
+          notes: item.notes,
         })
         .eq("id", item.id);
 
@@ -150,6 +270,7 @@ const Admin = () => {
         description: "Portfolio item updated",
       });
       
+      setDialogOpen(false);
       fetchData();
     } catch (error: any) {
       toast({
@@ -279,106 +400,234 @@ const Admin = () => {
                 </Button>
               </div>
 
-              <Card>
-                <ScrollArea className="h-[600px]">
-                  <Table>
-                    <TableHeader>
-                      <TableRow>
-                        <TableHead>Category</TableHead>
-                        <TableHead>Title</TableHead>
-                        <TableHead>Description</TableHead>
-                        <TableHead>Image URL</TableHead>
-                        <TableHead>Order</TableHead>
-                        <TableHead>Actions</TableHead>
-                      </TableRow>
-                    </TableHeader>
-                    <TableBody>
-                      {portfolioItems.map((item) => (
-                        <TableRow key={item.id}>
-                          <TableCell>
-                            <Input
-                              value={item.category}
-                              onChange={(e) => {
-                                const updated = portfolioItems.map((i) =>
-                                  i.id === item.id ? { ...i, category: e.target.value } : i
-                                );
-                                setPortfolioItems(updated);
-                              }}
-                              className="w-32"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              value={item.title}
-                              onChange={(e) => {
-                                const updated = portfolioItems.map((i) =>
-                                  i.id === item.id ? { ...i, title: e.target.value } : i
-                                );
-                                setPortfolioItems(updated);
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              value={item.description || ""}
-                              onChange={(e) => {
-                                const updated = portfolioItems.map((i) =>
-                                  i.id === item.id ? { ...i, description: e.target.value } : i
-                                );
-                                setPortfolioItems(updated);
-                              }}
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              value={item.image_url}
-                              onChange={(e) => {
-                                const updated = portfolioItems.map((i) =>
-                                  i.id === item.id ? { ...i, image_url: e.target.value } : i
-                                );
-                                setPortfolioItems(updated);
-                              }}
-                              className="w-48"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <Input
-                              type="number"
-                              value={item.display_order}
-                              onChange={(e) => {
-                                const updated = portfolioItems.map((i) =>
-                                  i.id === item.id ? { ...i, display_order: parseInt(e.target.value) } : i
-                                );
-                                setPortfolioItems(updated);
-                              }}
-                              className="w-20"
-                            />
-                          </TableCell>
-                          <TableCell>
-                            <div className="flex gap-2">
-                              <Button
-                                size="sm"
-                                onClick={() => handleUpdatePortfolioItem(item)}
-                                disabled={loading}
-                              >
-                                <Save className="h-4 w-4" />
-                              </Button>
-                              <Button
-                                size="sm"
-                                variant="destructive"
-                                onClick={() => handleDeletePortfolioItem(item.id)}
-                                disabled={loading}
-                              >
-                                <Trash2 className="h-4 w-4" />
-                              </Button>
-                            </div>
-                          </TableCell>
-                        </TableRow>
-                      ))}
-                    </TableBody>
-                  </Table>
-                </ScrollArea>
-              </Card>
+              <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {portfolioItems.map((item) => (
+                  <Card key={item.id} className="overflow-hidden">
+                    <div className="relative aspect-video bg-muted">
+                      <img
+                        src={item.image_url}
+                        alt={item.title}
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <CardHeader>
+                      <CardTitle className="line-clamp-1">{item.title}</CardTitle>
+                      <CardDescription className="line-clamp-1">{item.category}</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                      <div className="flex gap-2">
+                        <Dialog open={dialogOpen && editingItem?.id === item.id} onOpenChange={(open) => {
+                          setDialogOpen(open);
+                          if (!open) setEditingItem(null);
+                        }}>
+                          <DialogTrigger asChild>
+                            <Button
+                              variant="outline"
+                              className="flex-1"
+                              onClick={() => setEditingItem(item)}
+                            >
+                              Edit
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                            <DialogHeader>
+                              <DialogTitle>Edit Portfolio Item</DialogTitle>
+                              <DialogDescription>
+                                Update the details and upload a new image
+                              </DialogDescription>
+                            </DialogHeader>
+                            {editingItem && (
+                              <div className="space-y-4">
+                                {/* Image Upload Section */}
+                                <div className="space-y-2">
+                                  <Label>Image</Label>
+                                  <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+                                    <img
+                                      src={editingItem.image_url}
+                                      alt={editingItem.title}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </div>
+                                  <div className="flex gap-2">
+                                    <Button
+                                      variant="outline"
+                                      disabled={uploadingImage}
+                                      onClick={() => document.getElementById(`file-upload-${editingItem.id}`)?.click()}
+                                      className="flex-1"
+                                    >
+                                      <Upload className="mr-2 h-4 w-4" />
+                                      {uploadingImage ? "Uploading..." : "Upload New Image"}
+                                    </Button>
+                                    <input
+                                      id={`file-upload-${editingItem.id}`}
+                                      type="file"
+                                      accept="image/jpeg,image/png,image/webp"
+                                      className="hidden"
+                                      onChange={(e) => {
+                                        const file = e.target.files?.[0];
+                                        if (file) handleImageUpload(file, editingItem.id);
+                                      }}
+                                    />
+                                  </div>
+                                  <p className="text-xs text-muted-foreground">
+                                    Max size: 5MB. Formats: JPG, PNG, WEBP
+                                  </p>
+                                </div>
+
+                                {/* Title */}
+                                <div className="space-y-2">
+                                  <Label>Title *</Label>
+                                  <Input
+                                    value={editingItem.title}
+                                    onChange={(e) => setEditingItem({ ...editingItem, title: e.target.value })}
+                                    placeholder="Enter tattoo title"
+                                  />
+                                </div>
+
+                                {/* Style Dropdown */}
+                                <div className="space-y-2">
+                                  <Label>Style *</Label>
+                                  <Select
+                                    value={editingItem.category}
+                                    onValueChange={(value) => setEditingItem({ ...editingItem, category: value })}
+                                  >
+                                    <SelectTrigger>
+                                      <SelectValue placeholder="Select a style" />
+                                    </SelectTrigger>
+                                    <SelectContent>
+                                      {TATTOO_STYLES.map((style) => (
+                                        <SelectItem key={style} value={style}>
+                                          {style}
+                                        </SelectItem>
+                                      ))}
+                                    </SelectContent>
+                                  </Select>
+                                </div>
+
+                                {/* Description */}
+                                <div className="space-y-2">
+                                  <Label>Description</Label>
+                                  <Textarea
+                                    value={editingItem.description || ""}
+                                    onChange={(e) => setEditingItem({ ...editingItem, description: e.target.value })}
+                                    placeholder="Describe the tattoo"
+                                    rows={3}
+                                  />
+                                </div>
+
+                                {/* Two Column Layout for Details */}
+                                <div className="grid grid-cols-2 gap-4">
+                                  <div className="space-y-2">
+                                    <Label>Artist Name</Label>
+                                    <Input
+                                      value={editingItem.artist_name || ""}
+                                      onChange={(e) => setEditingItem({ ...editingItem, artist_name: e.target.value })}
+                                      placeholder="Artist name"
+                                    />
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    <Label>Duration (hours)</Label>
+                                    <Input
+                                      type="number"
+                                      step="0.5"
+                                      value={editingItem.duration_hours || ""}
+                                      onChange={(e) => setEditingItem({ ...editingItem, duration_hours: parseFloat(e.target.value) || null })}
+                                      placeholder="Hours"
+                                    />
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    <Label>Placement</Label>
+                                    <Input
+                                      value={editingItem.placement || ""}
+                                      onChange={(e) => setEditingItem({ ...editingItem, placement: e.target.value })}
+                                      placeholder="e.g., Arm, Back, Leg"
+                                    />
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    <Label>Size</Label>
+                                    <Input
+                                      value={editingItem.size || ""}
+                                      onChange={(e) => setEditingItem({ ...editingItem, size: e.target.value })}
+                                      placeholder="e.g., Small, 6x4 inches"
+                                    />
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    <Label>Color Type</Label>
+                                    <Select
+                                      value={editingItem.color_type || ""}
+                                      onValueChange={(value) => setEditingItem({ ...editingItem, color_type: value })}
+                                    >
+                                      <SelectTrigger>
+                                        <SelectValue placeholder="Select color type" />
+                                      </SelectTrigger>
+                                      <SelectContent>
+                                        <SelectItem value="Black & Grey">Black & Grey</SelectItem>
+                                        <SelectItem value="Full Color">Full Color</SelectItem>
+                                        <SelectItem value="Mixed">Mixed</SelectItem>
+                                      </SelectContent>
+                                    </Select>
+                                  </div>
+
+                                  <div className="space-y-2">
+                                    <Label>Display Order</Label>
+                                    <Input
+                                      type="number"
+                                      value={editingItem.display_order}
+                                      onChange={(e) => setEditingItem({ ...editingItem, display_order: parseInt(e.target.value) })}
+                                    />
+                                  </div>
+                                </div>
+
+                                {/* Notes */}
+                                <div className="space-y-2">
+                                  <Label>Notes</Label>
+                                  <Textarea
+                                    value={editingItem.notes || ""}
+                                    onChange={(e) => setEditingItem({ ...editingItem, notes: e.target.value })}
+                                    placeholder="Additional notes or special details"
+                                    rows={2}
+                                  />
+                                </div>
+
+                                {/* Action Buttons */}
+                                <div className="flex gap-2 pt-4">
+                                  <Button
+                                    onClick={() => handleUpdatePortfolioItem(editingItem)}
+                                    disabled={loading}
+                                    className="flex-1"
+                                  >
+                                    <Save className="mr-2 h-4 w-4" />
+                                    Save Changes
+                                  </Button>
+                                  <Button
+                                    variant="outline"
+                                    onClick={() => setDialogOpen(false)}
+                                    disabled={loading}
+                                  >
+                                    Cancel
+                                  </Button>
+                                </div>
+                              </div>
+                            )}
+                          </DialogContent>
+                        </Dialog>
+                        <Button
+                          variant="destructive"
+                          size="icon"
+                          onClick={() => handleDeletePortfolioItem(item.id)}
+                          disabled={loading}
+                        >
+                          <Trash2 className="h-4 w-4" />
+                        </Button>
+                      </div>
+                    </CardContent>
+                  </Card>
+                ))}
+              </div>
             </TabsContent>
           </Tabs>
         </main>
