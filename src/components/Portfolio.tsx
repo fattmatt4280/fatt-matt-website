@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import portfolio1 from "@/assets/portfolio-1.jpg";
 import portfolio2 from "@/assets/portfolio-2.jpg";
 import portfolio3 from "@/assets/portfolio-3.jpg";
@@ -5,24 +6,28 @@ import portfolio4 from "@/assets/portfolio-4.jpg";
 
 const portfolioItems = [
   {
-    title: "Black & Grey Realism",
+    title: "Black & Grey",
     image: portfolio1,
-    description: "Detailed photorealistic portraits and scenes"
+    description: "Timeless realism in grayscale",
+    link: "/portfolio/black-grey"
   },
   {
-    title: "Fine Line",
+    title: "Colorwork",
     image: portfolio2,
-    description: "Intricate minimalist designs with precision"
+    description: "Vibrant and bold color tattoos",
+    link: "/portfolio/colorwork"
   },
   {
-    title: "Large Projects",
+    title: "Portraits",
     image: portfolio3,
-    description: "Full sleeves and back pieces"
+    description: "Realistic portrait work",
+    link: "/portfolio/portraits"
   },
   {
-    title: "Custom Concepts",
+    title: "Cover-Ups",
     image: portfolio4,
-    description: "Unique artistic visions brought to life"
+    description: "Transforming old tattoos",
+    link: "/portfolio/cover-ups"
   }
 ];
 
@@ -36,9 +41,10 @@ const Portfolio = () => {
         
         <div className="grid md:grid-cols-2 gap-6 max-w-6xl mx-auto">
           {portfolioItems.map((item, index) => (
-            <div
+            <Link
               key={index}
-              className="group relative overflow-hidden rounded-xl card-glow transition-all duration-500 hover:scale-105 animate-fade-in-up"
+              to={item.link}
+              className="group relative overflow-hidden rounded-xl card-glow transition-all duration-500 hover:scale-105 animate-fade-in-up block"
               style={{ animationDelay: `${index * 0.1}s` }}
             >
               <img
@@ -57,7 +63,7 @@ const Portfolio = () => {
                   {item.description}
                 </p>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>
