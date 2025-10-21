@@ -1,16 +1,24 @@
 import { Link } from "react-router-dom";
-import { ArrowLeft } from "lucide-react";
+import { ArrowLeft, Loader2 } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import portfolio1 from "@/assets/portfolio-1.jpg";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
 import Footer from "@/components/Footer";
 
 const BlackGreyPortfolio = () => {
-  const images = [
-    { src: portfolio1, title: "Realistic Portrait", description: "Detailed black and grey portrait work" },
-    { src: portfolio1, title: "Geometric Design", description: "Intricate black and grey patterns" },
-    { src: portfolio1, title: "Nature Scene", description: "Realistic landscape in grayscale" },
-    { src: portfolio1, title: "Animal Portrait", description: "Detailed wildlife portrait" },
-  ];
+  const { data: portfolioItems, isLoading } = useQuery({
+    queryKey: ["portfolio-items", "Black & Grey"],
+    queryFn: async () => {
+      const { data, error } = await supabase
+        .from("portfolio_items")
+        .select("*")
+        .eq("category", "Black & Grey")
+        .order("display_order", { ascending: true });
+      
+      if (error) throw error;
+      return data || [];
+    },
+  });
 
   return (
     <div className="min-h-screen bg-background">
@@ -34,27 +42,37 @@ const BlackGreyPortfolio = () => {
             Timeless black and grey realism, capturing depth and emotion through expert shading and detail.
           </p>
 
-          <div className="grid md:grid-cols-2 gap-6">
-            {images.map((image, index) => (
-              <div
-                key={index}
-                className="group relative overflow-hidden rounded-xl card-glow transition-all duration-500 hover:scale-105"
-              >
-                <img
-                  src={image.src}
-                  alt={image.title}
-                  className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-110"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-90" />
-                <div className="absolute bottom-0 left-0 right-0 p-6">
-                  <h3 className="text-2xl font-orbitron font-semibold mb-2 text-glow">
-                    {image.title}
-                  </h3>
-                  <p className="text-muted-foreground">{image.description}</p>
+          {isLoading ? (
+            <div className="flex justify-center items-center py-20">
+              <Loader2 className="w-8 h-8 animate-spin text-primary" />
+            </div>
+          ) : portfolioItems && portfolioItems.length > 0 ? (
+            <div className="grid md:grid-cols-2 gap-6">
+              {portfolioItems.map((item) => (
+                <div
+                  key={item.id}
+                  className="group relative overflow-hidden rounded-xl card-glow transition-all duration-500 hover:scale-105"
+                >
+                  <img
+                    src={item.image_url}
+                    alt={item.title}
+                    className="w-full h-96 object-cover transition-transform duration-500 group-hover:scale-110"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-90" />
+                  <div className="absolute bottom-0 left-0 right-0 p-6">
+                    <h3 className="text-2xl font-orbitron font-semibold mb-2 text-glow">
+                      {item.title}
+                    </h3>
+                    <p className="text-muted-foreground">{item.description}</p>
+                  </div>
                 </div>
-              </div>
-            ))}
-          </div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-20">
+              <p className="text-muted-foreground">No portfolio items in this category yet.</p>
+            </div>
+          )}
         </div>
       </section>
 
