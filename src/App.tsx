@@ -9,6 +9,8 @@ import BlackGreyPortfolio from "./pages/BlackGreyPortfolio";
 import ColorworkPortfolio from "./pages/ColorworkPortfolio";
 import PortraitsPortfolio from "./pages/PortraitsPortfolio";
 import CoverUpsPortfolio from "./pages/CoverUpsPortfolio";
+import Auth from "./pages/Auth";
+import Admin from "./pages/Admin";
 
 const queryClient = new QueryClient();
 
@@ -19,6 +21,8 @@ const App = () => (
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<Index />} />
+        <Route path="/auth" element={<Auth />} />
+        <Route path="/admin" element={<Admin />} />
         <Route path="/portfolio/black-grey" element={<BlackGreyPortfolio />} />
         <Route path="/portfolio/colorwork" element={<ColorworkPortfolio />} />
         <Route path="/portfolio/portraits" element={<PortraitsPortfolio />} />
