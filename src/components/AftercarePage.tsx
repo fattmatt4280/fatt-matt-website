@@ -35,7 +35,11 @@ const AftercarePage = () => {
               </div>
             </div>
             <div className="flex gap-4">
-              <Button variant="neon" size="lg">
+              <Button 
+                variant="neon" 
+                size="lg"
+                onClick={() => window.open('https://bluedreambudder.com', '_blank')}
+              >
                 Shop Now
               </Button>
               <Button variant="cyan-outline" size="lg">
