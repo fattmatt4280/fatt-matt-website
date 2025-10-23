@@ -13,6 +13,9 @@ import { LogOut, Save, Plus, Trash2, Upload, Image as ImageIcon } from "lucide-r
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { Checkbox } from "@/components/ui/checkbox";
+import { Badge } from "@/components/ui/badge";
 
 interface SiteContent {
   id: string;
@@ -25,7 +28,7 @@ interface SiteContent {
 
 interface PortfolioItem {
   id: string;
-  category: string;
+  category: string[];
   title: string;
   description: string | null;
   image_url: string;
@@ -189,7 +192,7 @@ const Admin = () => {
 
   const handleAddPortfolioItem = async () => {
     const newItem = {
-      category: "Black & Grey",
+      category: ["Black & Grey"],
       title: "New Portfolio Item",
       description: "Add description here",
       image_url: "https://placehold.co/600x400",
@@ -235,10 +238,10 @@ const Admin = () => {
 
   const handleUpdatePortfolioItem = async (item: PortfolioItem) => {
     // Validate required fields
-    if (!item.title || !item.category) {
+    if (!item.title || !item.category || item.category.length === 0) {
       toast({
         title: "Validation Error",
-        description: "Title and style are required",
+        description: "Title and at least one style are required",
         variant: "destructive",
       });
       return;
@@ -412,7 +415,13 @@ const Admin = () => {
                     </div>
                     <CardHeader>
                       <CardTitle className="line-clamp-1">{item.title}</CardTitle>
-                      <CardDescription className="line-clamp-1">{item.category}</CardDescription>
+                      <CardDescription>
+                        <div className="flex flex-wrap gap-1">
+                          {item.category.map(cat => (
+                            <Badge key={cat} variant="secondary" className="text-xs">{cat}</Badge>
+                          ))}
+                        </div>
+                      </CardDescription>
                     </CardHeader>
                     <CardContent>
                       <div className="flex gap-2">
@@ -484,24 +493,56 @@ const Admin = () => {
                                   />
                                 </div>
 
-                                {/* Style Dropdown */}
+                                {/* Style Multi-Select */}
                                 <div className="space-y-2">
-                                  <Label>Style *</Label>
-                                  <Select
-                                    value={editingItem.category}
-                                    onValueChange={(value) => setEditingItem({ ...editingItem, category: value })}
-                                  >
-                                    <SelectTrigger>
-                                      <SelectValue placeholder="Select a style" />
-                                    </SelectTrigger>
-                                    <SelectContent>
-                                      {TATTOO_STYLES.map((style) => (
-                                        <SelectItem key={style} value={style}>
-                                          {style}
-                                        </SelectItem>
+                                  <Label>Styles * (select all that apply)</Label>
+                                  <Popover>
+                                    <PopoverTrigger asChild>
+                                      <Button variant="outline" className="w-full justify-start">
+                                        {editingItem.category.length === 0 
+                                          ? "Select styles..." 
+                                          : `${editingItem.category.length} selected`}
+                                      </Button>
+                                    </PopoverTrigger>
+                                    <PopoverContent className="w-full p-4">
+                                      <div className="space-y-2">
+                                        {TATTOO_STYLES.map((style) => (
+                                          <div key={style} className="flex items-center space-x-2">
+                                            <Checkbox 
+                                              id={`style-${style}`}
+                                              checked={editingItem.category.includes(style)}
+                                              onCheckedChange={(checked) => {
+                                                if (checked) {
+                                                  setEditingItem({ 
+                                                    ...editingItem, 
+                                                    category: [...editingItem.category, style] 
+                                                  });
+                                                } else {
+                                                  setEditingItem({ 
+                                                    ...editingItem, 
+                                                    category: editingItem.category.filter(s => s !== style) 
+                                                  });
+                                                }
+                                              }}
+                                            />
+                                            <label 
+                                              htmlFor={`style-${style}`}
+                                              className="text-sm cursor-pointer"
+                                            >
+                                              {style}
+                                            </label>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    </PopoverContent>
+                                  </Popover>
+                                  {editingItem.category.length > 0 && (
+                                    <div className="flex flex-wrap gap-1 mt-2">
+                                      {editingItem.category.map(cat => (
+                                        <Badge key={cat} variant="secondary">{cat}</Badge>
                                       ))}
-                                    </SelectContent>
-                                  </Select>
+                                    </div>
+                                  )}
                                 </div>
 
                                 {/* Description */}

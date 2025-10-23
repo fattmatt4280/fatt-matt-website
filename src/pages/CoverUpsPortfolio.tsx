@@ -12,7 +12,7 @@ const CoverUpsPortfolio = () => {
       const { data, error } = await supabase
         .from("portfolio_items")
         .select("*")
-        .eq("category", "Cover-Ups")
+        .contains("category", ["Cover-Ups"])
         .order("display_order", { ascending: true });
       
       if (error) throw error;

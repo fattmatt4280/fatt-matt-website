@@ -12,7 +12,7 @@ const ColorworkPortfolio = () => {
       const { data, error } = await supabase
         .from("portfolio_items")
         .select("*")
-        .in("category", ["Traditional", "Neo-Traditional", "Watercolor", "Japanese", "Tribal", "Geometric"])
+        .overlaps("category", ["Traditional", "Neo-Traditional", "Watercolor", "Japanese", "Tribal", "Geometric"])
         .order("display_order", { ascending: true });
       
       if (error) throw error;

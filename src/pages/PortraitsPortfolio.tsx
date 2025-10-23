@@ -12,7 +12,7 @@ const PortraitsPortfolio = () => {
       const { data, error } = await supabase
         .from("portfolio_items")
         .select("*")
-        .in("category", ["Portraits", "Realism"])
+        .overlaps("category", ["Portraits", "Realism"])
         .order("display_order", { ascending: true });
       
       if (error) throw error;

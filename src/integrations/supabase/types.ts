@@ -17,7 +17,7 @@ export type Database = {
       portfolio_items: {
         Row: {
           artist_name: string | null
-          category: string
+          category: string[]
           color_type: string | null
           created_at: string | null
           description: string | null
@@ -33,7 +33,7 @@ export type Database = {
         }
         Insert: {
           artist_name?: string | null
-          category: string
+          category: string[]
           color_type?: string | null
           created_at?: string | null
           description?: string | null
@@ -49,7 +49,7 @@ export type Database = {
         }
         Update: {
           artist_name?: string | null
-          category?: string
+          category?: string[]
           color_type?: string | null
           created_at?: string | null
           description?: string | null

@@ -12,7 +12,7 @@ const BlackGreyPortfolio = () => {
       const { data, error } = await supabase
         .from("portfolio_items")
         .select("*")
-        .eq("category", "Black & Grey")
+        .contains("category", ["Black & Grey"])
         .order("display_order", { ascending: true });
       
       if (error) throw error;
