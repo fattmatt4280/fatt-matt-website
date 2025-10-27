@@ -11,6 +11,9 @@ import PortraitsPortfolio from "./pages/PortraitsPortfolio";
 import CoverUpsPortfolio from "./pages/CoverUpsPortfolio";
 import Auth from "./pages/Auth";
 import Admin from "./pages/Admin";
+import Blog from "./pages/Blog";
+import Deals from "./pages/Deals";
+import Contests from "./pages/Contests";
 
 const queryClient = new QueryClient();
 
@@ -27,6 +30,9 @@ const App = () => (
         <Route path="/portfolio/colorwork" element={<ColorworkPortfolio />} />
         <Route path="/portfolio/portraits" element={<PortraitsPortfolio />} />
         <Route path="/portfolio/cover-ups" element={<CoverUpsPortfolio />} />
+        <Route path="/blog" element={<Blog />} />
+        <Route path="/deals" element={<Deals />} />
+        <Route path="/contests" element={<Contests />} />
         {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
         <Route path="*" element={<NotFound />} />
       </Routes>

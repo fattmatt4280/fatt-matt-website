@@ -30,6 +30,12 @@ const Navigation = () => {
     { label: "Aftercare", action: () => scrollToSection('aftercare') },
   ];
 
+  const additionalPages = [
+    { label: "Blog", to: "/blog" },
+    { label: "Deals", to: "/deals" },
+    { label: "Contests", to: "/contests" },
+  ];
+
   const portfolioPages = [
     { label: "Black & Grey", to: "/portfolio/black-grey" },
     { label: "Colorwork", to: "/portfolio/colorwork" },
@@ -68,6 +74,20 @@ const Navigation = () => {
               <div className="border-t border-primary/20 pt-4 space-y-3">
                 <h3 className="text-lg font-orbitron font-semibold text-primary mb-4">Portfolio</h3>
                 {portfolioPages.map((page) => (
+                  <Link
+                    key={page.to}
+                    to={page.to}
+                    onClick={() => setIsOpen(false)}
+                    className="block w-full text-left px-4 py-3 text-foreground hover:text-primary hover:bg-primary/10 rounded-lg transition-all duration-300 font-inter"
+                  >
+                    {page.label}
+                  </Link>
+                ))}
+              </div>
+
+              <div className="border-t border-primary/20 pt-4 space-y-3">
+                <h3 className="text-lg font-orbitron font-semibold text-primary mb-4">More</h3>
+                {additionalPages.map((page) => (
                   <Link
                     key={page.to}
                     to={page.to}

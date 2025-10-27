@@ -5,11 +5,13 @@ import Booking from "@/components/Booking";
 import AftercarePage from "@/components/AftercarePage";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
+import AnnouncementBanner from "@/components/AnnouncementBanner";
 
 const Index = () => {
   return (
     <main className="min-h-screen bg-background">
       <Navigation />
+      <AnnouncementBanner />
       <Hero />
       <About />
       <Portfolio />
