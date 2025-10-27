@@ -50,9 +50,7 @@ const Portfolio = () => {
               <img
                 src={item.image}
                 alt={item.title}
-                className={`w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110 ${
-                  item.title === "Portraits" ? "brightness-110 contrast-125 saturate-110" : ""
-                }`}
+                className="w-full h-80 object-cover transition-transform duration-500 group-hover:scale-110"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-background via-background/50 to-transparent opacity-90" />
               <div className="absolute inset-0 border-2 border-transparent group-hover:border-primary transition-all duration-500 rounded-xl group-hover:shadow-[0_0_20px_rgba(138,43,226,0.6)]" />
