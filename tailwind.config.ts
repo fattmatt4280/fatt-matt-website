@@ -48,8 +48,8 @@ export default {
           foreground: "hsl(var(--card-foreground))",
         },
         neon: {
-          violet: "hsl(var(--neon-violet))",
-          cyan: "hsl(var(--neon-cyan))",
+          red: "hsl(var(--neon-red))",
+          orange: "hsl(var(--neon-orange))",
         },
       },
       fontFamily: {

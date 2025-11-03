@@ -13,46 +13,46 @@ All colors MUST be HSL.
 
 @layer base {
   :root {
-    --background: 240 71% 2%;
+    --background: 15 40% 3%;
     --foreground: 0 0% 100%;
 
-    --card: 240 50% 5%;
+    --card: 15 35% 6%;
     --card-foreground: 0 0% 100%;
 
-    --popover: 240 50% 5%;
+    --popover: 15 35% 6%;
     --popover-foreground: 0 0% 100%;
 
-    --primary: 271 76% 53%;
-    --primary-foreground: 0 0% 100%;
+    --primary: 0 85% 45%;
+    --primary-foreground: 50 100% 95%;
 
-    --secondary: 180 100% 50%;
-    --secondary-foreground: 240 71% 2%;
+    --secondary: 45 100% 60%;
+    --secondary-foreground: 15 40% 3%;
 
-    --muted: 240 30% 15%;
+    --muted: 20 25% 15%;
     --muted-foreground: 0 0% 80%;
 
-    --accent: 271 76% 53%;
-    --accent-foreground: 0 0% 100%;
+    --accent: 25 100% 55%;
+    --accent-foreground: 50 100% 95%;
 
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 0 0% 100%;
 
-    --border: 240 30% 15%;
-    --input: 240 30% 15%;
-    --ring: 271 76% 53%;
+    --border: 20 25% 15%;
+    --input: 20 25% 15%;
+    --ring: 0 85% 45%;
 
     --radius: 0.75rem;
 
-    --neon-violet: 271 76% 53%;
-    --neon-cyan: 180 100% 50%;
-    --glow-violet: 271 76% 53%;
-    --glow-cyan: 180 100% 50%;
+    --neon-red: 0 85% 50%;
+    --neon-orange: 35 100% 55%;
+    --glow-red: 0 85% 50%;
+    --glow-orange: 35 100% 55%;
 
-    --gradient-neon: linear-gradient(135deg, hsl(var(--neon-violet)), hsl(var(--neon-cyan)));
-    --gradient-dark: linear-gradient(180deg, hsl(240 71% 2%), hsl(240 50% 5%));
+    --gradient-neon: linear-gradient(135deg, hsl(var(--neon-red)), hsl(var(--neon-orange)));
+    --gradient-dark: linear-gradient(180deg, hsl(15 40% 3%), hsl(15 35% 6%));
     
-    --shadow-neon: 0 0 20px hsl(var(--neon-violet) / 0.5), 0 0 40px hsl(var(--neon-violet) / 0.3);
-    --shadow-cyan: 0 0 20px hsl(var(--neon-cyan) / 0.5), 0 0 40px hsl(var(--neon-cyan) / 0.3);
+    --shadow-neon: 0 0 20px hsl(var(--neon-red) / 0.5), 0 0 40px hsl(var(--neon-red) / 0.3);
+    --shadow-orange: 0 0 20px hsl(var(--neon-orange) / 0.5), 0 0 40px hsl(var(--neon-orange) / 0.3);
     
     --transition-smooth: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
@@ -80,13 +80,13 @@ All colors MUST be HSL.
   }
 
   .neon-border {
-    border: 1px solid hsl(var(--neon-violet));
-    box-shadow: 0 0 10px hsl(var(--neon-violet) / 0.5), inset 0 0 10px hsl(var(--neon-violet) / 0.1);
+    border: 1px solid hsl(var(--neon-red));
+    box-shadow: 0 0 10px hsl(var(--neon-red) / 0.5), inset 0 0 10px hsl(var(--neon-red) / 0.1);
   }
 
-  .cyan-border {
-    border: 1px solid hsl(var(--neon-cyan));
-    box-shadow: 0 0 10px hsl(var(--neon-cyan) / 0.5), inset 0 0 10px hsl(var(--neon-cyan) / 0.1);
+  .orange-border {
+    border: 1px solid hsl(var(--neon-orange));
+    box-shadow: 0 0 10px hsl(var(--neon-orange) / 0.5), inset 0 0 10px hsl(var(--neon-orange) / 0.1);
   }
 
   .card-glow {
@@ -115,10 +115,10 @@ All colors MUST be HSL.
 
   @keyframes pulse-glow {
     0%, 100% {
-      box-shadow: 0 0 20px hsl(var(--neon-violet) / 0.5);
+      box-shadow: 0 0 20px hsl(var(--neon-red) / 0.5);
     }
     50% {
-      box-shadow: 0 0 40px hsl(var(--neon-violet) / 0.8), 0 0 60px hsl(var(--neon-cyan) / 0.4);
+      box-shadow: 0 0 40px hsl(var(--neon-red) / 0.8), 0 0 60px hsl(var(--neon-orange) / 0.4);
     }
   }
 
