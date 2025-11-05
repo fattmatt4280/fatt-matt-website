@@ -38,7 +38,7 @@ const AftercarePage = () => {
               <Button 
                 variant="neon" 
                 size="lg"
-                onClick={() => window.open('https://bluedreambudder.com', '_blank')}
+                onClick={() => window.open('https://bluedreambudder.com/shop', '_blank')}
               >
                 Shop Now
               </Button>
