@@ -23,7 +23,11 @@ const Navigation = () => {
   };
 
   const menuItems = [
-    { label: "Home", action: () => { navigate('/'); setIsOpen(false); } },
+    { label: "Home", action: () => { 
+      navigate('/'); 
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setIsOpen(false); 
+    } },
     { label: "About", action: () => scrollToSection('about') },
     { label: "Portfolio", action: () => scrollToSection('portfolio') },
     { label: "Book Now", action: () => scrollToSection('booking') },
