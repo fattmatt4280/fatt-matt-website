@@ -32,7 +32,7 @@ const handler = async (req: Request): Promise<Response> => {
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
-          price: 'price_1SQStRDiBqghYX9igoBzofMi',
+          price: 'price_1SQUf0Rzfwe0oZX3bG0c8Q29',
           quantity: 1,
         },
       ],
