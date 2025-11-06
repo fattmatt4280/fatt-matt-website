@@ -4,6 +4,8 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const Booking = () => {
   const [formData, setFormData] = useState({
@@ -12,11 +14,49 @@ const Booking = () => {
     message: "",
     location: "Montgomery IL"
   });
+  const [aiFormData, setAiFormData] = useState({
+    name: "",
+    email: "",
+    idea: "",
+  });
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent, consultType: string) => {
     e.preventDefault();
-    // Will integrate with backend later
-    console.log("Booking submission:", formData);
+    setIsSubmitting(true);
+
+    try {
+      const data = consultType === "AI Consult" ? {
+        name: aiFormData.name,
+        email: aiFormData.email,
+        message: aiFormData.idea,
+        location: "Not specified",
+        consultType,
+      } : {
+        ...formData,
+        consultType,
+      };
+
+      const { error } = await supabase.functions.invoke('send-booking-email', {
+        body: data,
+      });
+
+      if (error) throw error;
+
+      toast.success("Booking request sent! We'll get back to you soon.");
+      
+      // Clear form
+      if (consultType === "AI Consult") {
+        setAiFormData({ name: "", email: "", idea: "" });
+      } else {
+        setFormData({ name: "", email: "", message: "", location: "Montgomery IL" });
+      }
+    } catch (error: any) {
+      console.error('Error sending booking:', error);
+      toast.error("Failed to send booking request. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -37,13 +77,16 @@ const Booking = () => {
             </TabsList>
             
             <TabsContent value="ai">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={(e) => handleSubmit(e, "AI Consult")} className="space-y-6">
                 <div>
                   <Label htmlFor="ai-name">Name</Label>
                   <Input
                     id="ai-name"
+                    value={aiFormData.name}
+                    onChange={(e) => setAiFormData({ ...aiFormData, name: e.target.value })}
                     placeholder="Your name"
                     className="bg-muted/50 border-border"
+                    required
                   />
                 </div>
                 <div>
@@ -51,17 +94,23 @@ const Booking = () => {
                   <Input
                     id="ai-email"
                     type="email"
+                    value={aiFormData.email}
+                    onChange={(e) => setAiFormData({ ...aiFormData, email: e.target.value })}
                     placeholder="your@email.com"
                     className="bg-muted/50 border-border"
+                    required
                   />
                 </div>
                 <div>
                   <Label htmlFor="ai-idea">Tattoo Idea Description</Label>
                   <Textarea
                     id="ai-idea"
+                    value={aiFormData.idea}
+                    onChange={(e) => setAiFormData({ ...aiFormData, idea: e.target.value })}
                     placeholder="Describe your tattoo concept, placement, size..."
                     rows={4}
                     className="bg-muted/50 border-border"
+                    required
                   />
                 </div>
                 <div>
@@ -73,8 +122,14 @@ const Booking = () => {
                     className="bg-muted/50 border-border"
                   />
                 </div>
-                <Button variant="neon" size="lg" type="submit" className="w-full">
-                  Get AI Consultation
+                <Button 
+                  variant="neon" 
+                  size="lg" 
+                  type="submit" 
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending..." : "Get AI Consultation"}
                 </Button>
                 <p className="text-sm text-muted-foreground text-center">
                   AI will analyze your request and suggest pricing, timing, and availability
@@ -83,7 +138,7 @@ const Booking = () => {
             </TabsContent>
             
             <TabsContent value="manual">
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={(e) => handleSubmit(e, "Manual Consult")} className="space-y-6">
                 <div>
                   <Label htmlFor="name">Name</Label>
                   <Input
@@ -92,6 +147,7 @@ const Booking = () => {
                     onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                     placeholder="Your name"
                     className="bg-muted/50 border-border"
+                    required
                   />
                 </div>
                 <div>
@@ -103,6 +159,7 @@ const Booking = () => {
                     onChange={(e) => setFormData({ ...formData, email: e.target.value })}
                     placeholder="your@email.com"
                     className="bg-muted/50 border-border"
+                    required
                   />
                 </div>
                 <div>
@@ -126,10 +183,17 @@ const Booking = () => {
                     placeholder="Tell me about your tattoo idea..."
                     rows={4}
                     className="bg-muted/50 border-border"
+                    required
                   />
                 </div>
-                <Button variant="neon" size="lg" type="submit" className="w-full">
-                  Submit Consultation Request
+                <Button 
+                  variant="neon" 
+                  size="lg" 
+                  type="submit" 
+                  className="w-full"
+                  disabled={isSubmitting}
+                >
+                  {isSubmitting ? "Sending..." : "Submit Consultation Request"}
                 </Button>
               </form>
             </TabsContent>
