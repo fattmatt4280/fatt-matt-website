@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 
 const About = () => {
   return (
-    <section className="py-20 px-4 relative">
+    <section id="about" className="py-20 px-4 relative">
       <div className="container mx-auto max-w-4xl">
         <div className="card-glow rounded-xl p-8 md:p-12 relative overflow-hidden animate-fade-in-up">
           {/* Subtle glow effect */}
