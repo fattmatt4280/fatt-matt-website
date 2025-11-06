@@ -37,24 +37,22 @@ const Booking = () => {
         consultType,
       };
 
-      const { error } = await supabase.functions.invoke('send-booking-email', {
+      // Create Stripe checkout session
+      const { data: sessionData, error } = await supabase.functions.invoke('create-checkout-session', {
         body: data,
       });
 
       if (error) throw error;
 
-      toast.success("Booking request sent! We'll get back to you soon.");
-      
-      // Clear form
-      if (consultType === "AI Consult") {
-        setAiFormData({ name: "", email: "", idea: "" });
+      if (sessionData?.url) {
+        // Redirect to Stripe checkout
+        window.location.href = sessionData.url;
       } else {
-        setFormData({ name: "", email: "", message: "", location: "Montgomery IL" });
+        throw new Error('No checkout URL received');
       }
     } catch (error: any) {
-      console.error('Error sending booking:', error);
-      toast.error("Failed to send booking request. Please try again.");
-    } finally {
+      console.error('Error creating checkout:', error);
+      toast.error("Failed to create checkout session. Please try again.");
       setIsSubmitting(false);
     }
   };
@@ -129,10 +127,10 @@ const Booking = () => {
                   className="w-full"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Sending..." : "Get AI Consultation"}
+                  {isSubmitting ? "Processing..." : "Pay Deposit & Book Consultation"}
                 </Button>
                 <p className="text-sm text-muted-foreground text-center">
-                  AI will analyze your request and suggest pricing, timing, and availability
+                  Secure deposit payment required to confirm your consultation
                 </p>
               </form>
             </TabsContent>
@@ -193,7 +191,7 @@ const Booking = () => {
                   className="w-full"
                   disabled={isSubmitting}
                 >
-                  {isSubmitting ? "Sending..." : "Submit Consultation Request"}
+                  {isSubmitting ? "Processing..." : "Pay Deposit & Book Consultation"}
                 </Button>
               </form>
             </TabsContent>
