@@ -45,8 +45,30 @@ const Booking = () => {
       if (error) throw error;
 
       if (sessionData?.url) {
-        // Redirect to Stripe checkout
-        window.location.href = sessionData.url;
+        // Open Stripe checkout in new tab (more reliable on mobile)
+        const opened = window.open(sessionData.url, '_blank');
+        
+        // Show notification with fallback link
+        if (opened) {
+          toast.success("Opening payment page...", {
+            description: "If the page doesn't open, click here",
+            action: {
+              label: "Open Payment",
+              onClick: () => window.open(sessionData.url, '_blank')
+            }
+          });
+        } else {
+          toast.error("Popup blocked", {
+            description: "Please click the button below to complete payment",
+            action: {
+              label: "Open Payment",
+              onClick: () => window.open(sessionData.url, '_blank')
+            }
+          });
+        }
+        
+        // Reset submitting state so form is usable again
+        setIsSubmitting(false);
       } else {
         throw new Error('No checkout URL received');
       }
