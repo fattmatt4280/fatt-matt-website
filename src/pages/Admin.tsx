@@ -406,11 +406,11 @@ const Admin = () => {
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
                 {portfolioItems.map((item) => (
                   <Card key={item.id} className="overflow-hidden">
-                    <div className="relative aspect-video bg-muted">
+                    <div className="relative min-h-[200px] max-h-[400px] bg-muted flex items-center justify-center">
                       <img
                         src={item.image_url}
                         alt={item.title}
-                        className="w-full h-full object-cover"
+                        className="w-full h-full object-contain"
                       />
                     </div>
                     <CardHeader>
@@ -450,11 +450,11 @@ const Admin = () => {
                                 {/* Image Upload Section */}
                                 <div className="space-y-2">
                                   <Label>Image</Label>
-                                  <div className="relative aspect-video bg-muted rounded-lg overflow-hidden">
+                                  <div className="relative min-h-[300px] max-h-[500px] bg-muted rounded-lg overflow-hidden flex items-center justify-center">
                                     <img
                                       src={editingItem.image_url}
                                       alt={editingItem.title}
-                                      className="w-full h-full object-cover"
+                                      className="w-full h-full object-contain"
                                     />
                                   </div>
                                   <div className="flex gap-2">
