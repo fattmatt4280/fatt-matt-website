@@ -4,6 +4,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
 
@@ -11,14 +12,19 @@ const Booking = () => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     message: "",
-    location: "Montgomery IL"
+    location: "Montgomery IL",
+    bodyLocation: ""
   });
   const [aiFormData, setAiFormData] = useState({
     name: "",
     email: "",
+    phone: "",
     idea: "",
+    bodyLocation: ""
   });
+  const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleSubmit = async (e: React.FormEvent, consultType: string) => {
@@ -29,8 +35,10 @@ const Booking = () => {
       const data = consultType === "AI Consult" ? {
         name: aiFormData.name,
         email: aiFormData.email,
+        phone: aiFormData.phone,
         message: aiFormData.idea,
         location: "Not specified",
+        bodyLocation: aiFormData.bodyLocation,
         consultType,
       } : {
         ...formData,
@@ -122,6 +130,53 @@ const Booking = () => {
                   />
                 </div>
                 <div>
+                  <Label htmlFor="ai-phone">Contact #</Label>
+                  <Input
+                    id="ai-phone"
+                    type="tel"
+                    value={aiFormData.phone}
+                    onChange={(e) => setAiFormData({ ...aiFormData, phone: e.target.value })}
+                    placeholder="(555) 123-4567"
+                    className="bg-muted/50 border-border"
+                    required
+                  />
+                </div>
+                <div>
+                  <Label htmlFor="ai-body-location">Body Location</Label>
+                  <Select
+                    value={aiFormData.bodyLocation}
+                    onValueChange={(value) => setAiFormData({ ...aiFormData, bodyLocation: value })}
+                    required
+                  >
+                    <SelectTrigger className="bg-muted/50 border-border">
+                      <SelectValue placeholder="Select body placement" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border-border z-50">
+                      <SelectItem value="arm-upper-left">ARM - Upper Left</SelectItem>
+                      <SelectItem value="arm-upper-right">ARM - Upper Right</SelectItem>
+                      <SelectItem value="arm-lower-left">ARM - Lower Left</SelectItem>
+                      <SelectItem value="arm-lower-right">ARM - Lower Right</SelectItem>
+                      <SelectItem value="leg-upper-left">LEG - Upper Left</SelectItem>
+                      <SelectItem value="leg-upper-right">LEG - Upper Right</SelectItem>
+                      <SelectItem value="leg-lower-left">LEG - Lower Left</SelectItem>
+                      <SelectItem value="leg-lower-right">LEG - Lower Right</SelectItem>
+                      <SelectItem value="chest-left">CHEST - Left</SelectItem>
+                      <SelectItem value="chest-right">CHEST - Right</SelectItem>
+                      <SelectItem value="chest-ribs">CHEST - Ribs</SelectItem>
+                      <SelectItem value="rib-left">RIB - Left</SelectItem>
+                      <SelectItem value="rib-right">RIB - Right</SelectItem>
+                      <SelectItem value="back-left">BACK - Left</SelectItem>
+                      <SelectItem value="back-right">BACK - Right</SelectItem>
+                      <SelectItem value="back-whole">BACK - Whole Back</SelectItem>
+                      <SelectItem value="neck-left">NECK - Left</SelectItem>
+                      <SelectItem value="neck-right">NECK - Right</SelectItem>
+                      <SelectItem value="neck-throat">NECK - Throat</SelectItem>
+                      <SelectItem value="head-full">HEAD - Full Head</SelectItem>
+                      <SelectItem value="head-face">HEAD - Face</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
                   <Label htmlFor="ai-idea">Tattoo Idea Description</Label>
                   <Textarea
                     id="ai-idea"
@@ -134,13 +189,20 @@ const Booking = () => {
                   />
                 </div>
                 <div>
-                  <Label htmlFor="ai-photo">Reference Photo (Optional)</Label>
+                  <Label htmlFor="ai-photo">Reference Photos</Label>
                   <Input
                     id="ai-photo"
                     type="file"
                     accept="image/*"
+                    multiple
+                    onChange={(e) => setSelectedFiles(e.target.files)}
                     className="bg-muted/50 border-border"
                   />
+                  {selectedFiles && selectedFiles.length > 0 && (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {selectedFiles.length} file(s) selected
+                    </p>
+                  )}
                 </div>
                 <Button 
                   variant="neon" 
@@ -183,6 +245,18 @@ const Booking = () => {
                   />
                 </div>
                 <div>
+                  <Label htmlFor="phone">Contact #</Label>
+                  <Input
+                    id="phone"
+                    type="tel"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    placeholder="(555) 123-4567"
+                    className="bg-muted/50 border-border"
+                    required
+                  />
+                </div>
+                <div>
                   <Label htmlFor="location">Preferred Location</Label>
                   <select
                     id="location"
@@ -195,6 +269,41 @@ const Booking = () => {
                   </select>
                 </div>
                 <div>
+                  <Label htmlFor="body-location">Body Location</Label>
+                  <Select
+                    value={formData.bodyLocation}
+                    onValueChange={(value) => setFormData({ ...formData, bodyLocation: value })}
+                    required
+                  >
+                    <SelectTrigger className="bg-muted/50 border-border">
+                      <SelectValue placeholder="Select body placement" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border-border z-50">
+                      <SelectItem value="arm-upper-left">ARM - Upper Left</SelectItem>
+                      <SelectItem value="arm-upper-right">ARM - Upper Right</SelectItem>
+                      <SelectItem value="arm-lower-left">ARM - Lower Left</SelectItem>
+                      <SelectItem value="arm-lower-right">ARM - Lower Right</SelectItem>
+                      <SelectItem value="leg-upper-left">LEG - Upper Left</SelectItem>
+                      <SelectItem value="leg-upper-right">LEG - Upper Right</SelectItem>
+                      <SelectItem value="leg-lower-left">LEG - Lower Left</SelectItem>
+                      <SelectItem value="leg-lower-right">LEG - Lower Right</SelectItem>
+                      <SelectItem value="chest-left">CHEST - Left</SelectItem>
+                      <SelectItem value="chest-right">CHEST - Right</SelectItem>
+                      <SelectItem value="chest-ribs">CHEST - Ribs</SelectItem>
+                      <SelectItem value="rib-left">RIB - Left</SelectItem>
+                      <SelectItem value="rib-right">RIB - Right</SelectItem>
+                      <SelectItem value="back-left">BACK - Left</SelectItem>
+                      <SelectItem value="back-right">BACK - Right</SelectItem>
+                      <SelectItem value="back-whole">BACK - Whole Back</SelectItem>
+                      <SelectItem value="neck-left">NECK - Left</SelectItem>
+                      <SelectItem value="neck-right">NECK - Right</SelectItem>
+                      <SelectItem value="neck-throat">NECK - Throat</SelectItem>
+                      <SelectItem value="head-full">HEAD - Full Head</SelectItem>
+                      <SelectItem value="head-face">HEAD - Face</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
                   <Label htmlFor="message">Message</Label>
                   <Textarea
                     id="message"
@@ -205,6 +314,22 @@ const Booking = () => {
                     className="bg-muted/50 border-border"
                     required
                   />
+                </div>
+                <div>
+                  <Label htmlFor="photo">Reference Images</Label>
+                  <Input
+                    id="photo"
+                    type="file"
+                    accept="image/*"
+                    multiple
+                    onChange={(e) => setSelectedFiles(e.target.files)}
+                    className="bg-muted/50 border-border"
+                  />
+                  {selectedFiles && selectedFiles.length > 0 && (
+                    <p className="text-sm text-muted-foreground mt-2">
+                      {selectedFiles.length} file(s) selected
+                    </p>
+                  )}
                 </div>
                 <Button 
                   variant="neon" 

@@ -13,8 +13,10 @@ const corsHeaders = {
 interface CheckoutRequest {
   name: string;
   email: string;
+  phone: string;
   message: string;
   location: string;
+  bodyLocation: string;
   consultType: string;
 }
 
@@ -24,9 +26,9 @@ const handler = async (req: Request): Promise<Response> => {
   }
 
   try {
-    const { name, email, message, location, consultType }: CheckoutRequest = await req.json();
+    const { name, email, phone, message, location, bodyLocation, consultType }: CheckoutRequest = await req.json();
 
-    console.log('Creating checkout session for:', { name, email, consultType });
+    console.log('Creating checkout session for:', { name, email, phone, consultType });
 
     // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
@@ -43,8 +45,10 @@ const handler = async (req: Request): Promise<Response> => {
       metadata: {
         name,
         email,
+        phone,
         message,
         location,
+        bodyLocation,
         consultType,
       },
     });
