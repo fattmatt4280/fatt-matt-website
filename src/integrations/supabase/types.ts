@@ -14,6 +14,41 @@ export type Database = {
   }
   public: {
     Tables: {
+      portfolio_images: {
+        Row: {
+          created_at: string
+          display_order: number
+          id: string
+          image_url: string
+          portfolio_item_id: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url: string
+          portfolio_item_id: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          display_order?: number
+          id?: string
+          image_url?: string
+          portfolio_item_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_images_portfolio_item_id_fkey"
+            columns: ["portfolio_item_id"]
+            isOneToOne: false
+            referencedRelation: "portfolio_items"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       portfolio_items: {
         Row: {
           artist_name: string | null

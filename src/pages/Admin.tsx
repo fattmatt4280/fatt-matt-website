@@ -41,6 +41,14 @@ interface PortfolioItem {
   notes: string | null;
 }
 
+interface PortfolioImage {
+  id: string;
+  portfolio_item_id: string;
+  image_url: string;
+  display_order: number;
+  created_at: string;
+}
+
 const TATTOO_STYLES = [
   "Black & Grey",
   "Traditional",
@@ -62,6 +70,7 @@ const Admin = () => {
   const [loading, setLoading] = useState(false);
   const [siteContent, setSiteContent] = useState<SiteContent[]>([]);
   const [portfolioItems, setPortfolioItems] = useState<PortfolioItem[]>([]);
+  const [portfolioImages, setPortfolioImages] = useState<PortfolioImage[]>([]);
   const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
@@ -81,8 +90,14 @@ const Admin = () => {
       .select("*")
       .order("display_order");
 
+    const { data: images } = await supabase
+      .from("portfolio_images")
+      .select("*")
+      .order("display_order");
+
     if (content) setSiteContent(content);
     if (portfolio) setPortfolioItems(portfolio);
+    if (images) setPortfolioImages(images);
   };
 
   const handleSignOut = async () => {
@@ -122,62 +137,84 @@ const Admin = () => {
     }
   };
 
-  const handleImageUpload = async (file: File, itemId: string) => {
-    if (!file) return;
-
-    // Validate file
-    if (file.size > 5 * 1024 * 1024) {
-      toast({
-        title: "Error",
-        description: "File size must be less than 5MB",
-        variant: "destructive",
-      });
-      return;
-    }
-
-    if (!file.type.startsWith("image/")) {
-      toast({
-        title: "Error",
-        description: "File must be an image",
-        variant: "destructive",
-      });
-      return;
-    }
+  const handleMultipleImageUpload = async (files: FileList, itemId: string) => {
+    if (!files || files.length === 0) return;
 
     setUploadingImage(true);
+    let successCount = 0;
+    let errorCount = 0;
+
     try {
-      const fileExt = file.name.split(".").pop();
-      const fileName = `${itemId}-${Date.now()}.${fileExt}`;
-      const filePath = `${fileName}`;
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
 
-      // Upload to storage
-      const { error: uploadError } = await supabase.storage
-        .from("portfolio-images")
-        .upload(filePath, file, { upsert: true });
+        // Validate file
+        if (file.size > 5 * 1024 * 1024) {
+          toast({
+            title: "Error",
+            description: `${file.name}: File size must be less than 5MB`,
+            variant: "destructive",
+          });
+          errorCount++;
+          continue;
+        }
 
-      if (uploadError) throw uploadError;
+        if (!file.type.startsWith("image/")) {
+          toast({
+            title: "Error",
+            description: `${file.name}: File must be an image`,
+            variant: "destructive",
+          });
+          errorCount++;
+          continue;
+        }
 
-      // Get public URL
-      const { data: { publicUrl } } = supabase.storage
-        .from("portfolio-images")
-        .getPublicUrl(filePath);
+        try {
+          const fileExt = file.name.split(".").pop();
+          const fileName = `${itemId}-${Date.now()}-${i}.${fileExt}`;
+          const filePath = `${fileName}`;
 
-      // Update the item with new image URL
-      const { error: updateError } = await supabase
-        .from("portfolio_items")
-        .update({ image_url: publicUrl })
-        .eq("id", itemId);
+          // Upload to storage
+          const { error: uploadError } = await supabase.storage
+            .from("portfolio-images")
+            .upload(filePath, file, { upsert: true });
 
-      if (updateError) throw updateError;
+          if (uploadError) throw uploadError;
 
-      toast({
-        title: "Success",
-        description: "Image uploaded successfully",
-      });
+          // Get public URL
+          const { data: { publicUrl } } = supabase.storage
+            .from("portfolio-images")
+            .getPublicUrl(filePath);
 
-      fetchData();
-      if (editingItem && editingItem.id === itemId) {
-        setEditingItem({ ...editingItem, image_url: publicUrl });
+          // Get current max display_order for this item
+          const currentImages = portfolioImages.filter(img => img.portfolio_item_id === itemId);
+          const maxOrder = currentImages.length > 0 
+            ? Math.max(...currentImages.map(img => img.display_order))
+            : -1;
+
+          // Insert into portfolio_images table
+          const { error: insertError } = await supabase
+            .from("portfolio_images")
+            .insert({
+              portfolio_item_id: itemId,
+              image_url: publicUrl,
+              display_order: maxOrder + 1 + i
+            });
+
+          if (insertError) throw insertError;
+          successCount++;
+        } catch (error: any) {
+          console.error(`Error uploading ${file.name}:`, error);
+          errorCount++;
+        }
+      }
+
+      if (successCount > 0) {
+        toast({
+          title: "Success",
+          description: `${successCount} image(s) uploaded successfully${errorCount > 0 ? `, ${errorCount} failed` : ''}`,
+        });
+        fetchData();
       }
     } catch (error: any) {
       toast({
@@ -187,6 +224,31 @@ const Admin = () => {
       });
     } finally {
       setUploadingImage(false);
+    }
+  };
+
+  const handleDeleteImage = async (imageId: string) => {
+    if (!confirm("Delete this image?")) return;
+
+    try {
+      const { error } = await supabase
+        .from("portfolio_images")
+        .delete()
+        .eq("id", imageId);
+
+      if (error) throw error;
+
+      toast({
+        title: "Success",
+        description: "Image deleted",
+      });
+      fetchData();
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message,
+        variant: "destructive",
+      });
     }
   };
 
@@ -404,18 +466,33 @@ const Admin = () => {
               </div>
 
               <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-                {portfolioItems.map((item) => (
-                  <Card key={item.id} className="overflow-hidden">
-                    <div className="relative bg-muted">
-                      <img
-                        src={item.image_url}
-                        alt={item.title}
-                        className="w-full h-auto object-contain mx-auto"
-                      />
-                    </div>
-                    <CardHeader>
-                      <CardTitle className="line-clamp-1">{item.title}</CardTitle>
-                      <CardDescription>
+                {portfolioItems.map((item) => {
+                  const itemImages = portfolioImages.filter(img => img.portfolio_item_id === item.id);
+                  const displayImage = itemImages.length > 0 
+                    ? itemImages.sort((a, b) => a.display_order - b.display_order)[0].image_url
+                    : item.image_url;
+                  
+                  return (
+                    <Card key={item.id} className="overflow-hidden">
+                      <div className="relative bg-muted">
+                        <img
+                          src={displayImage}
+                          alt={item.title}
+                          className="w-full h-auto object-contain mx-auto"
+                        />
+                        {itemImages.length > 1 && (
+                          <Badge 
+                            variant="secondary" 
+                            className="absolute top-2 right-2 bg-background/80 backdrop-blur"
+                          >
+                            <ImageIcon className="h-3 w-3 mr-1" />
+                            {itemImages.length}
+                          </Badge>
+                        )}
+                      </div>
+                      <CardHeader>
+                        <CardTitle className="line-clamp-1">{item.title}</CardTitle>
+                        <CardDescription>
                         <div className="flex flex-wrap gap-1">
                           {item.category.map(cat => (
                             <Badge key={cat} variant="secondary" className="text-xs">{cat}</Badge>
@@ -442,21 +519,53 @@ const Admin = () => {
                             <DialogHeader>
                               <DialogTitle>Edit Portfolio Item</DialogTitle>
                               <DialogDescription>
-                                Update the details and upload a new image
+                                Update the details and upload multiple images
                               </DialogDescription>
                             </DialogHeader>
                             {editingItem && (
                               <div className="space-y-4">
                                 {/* Image Upload Section */}
                                 <div className="space-y-2">
-                                  <Label>Image</Label>
-                                  <div className="relative bg-muted rounded-lg">
-                                    <img
-                                      src={editingItem.image_url}
-                                      alt={editingItem.title}
-                                      className="max-h-[70vh] w-auto mx-auto object-contain"
-                                    />
-                                  </div>
+                                  <Label>Images (Multiple)</Label>
+                                  
+                                  {/* Display all images for this item */}
+                                  {(() => {
+                                    const itemImages = portfolioImages.filter(
+                                      img => img.portfolio_item_id === editingItem.id
+                                    );
+                                    return itemImages.length > 0 ? (
+                                      <div className="grid grid-cols-2 md:grid-cols-3 gap-4 mb-4">
+                                        {itemImages.map((img) => (
+                                          <div key={img.id} className="relative group">
+                                            <div className="relative bg-muted rounded-lg overflow-hidden">
+                                              <img
+                                                src={img.image_url}
+                                                alt={`Image ${img.display_order + 1}`}
+                                                className="w-full h-48 object-contain"
+                                              />
+                                            </div>
+                                            <Button
+                                              variant="destructive"
+                                              size="sm"
+                                              className="absolute top-2 right-2 opacity-0 group-hover:opacity-100 transition-opacity"
+                                              onClick={() => handleDeleteImage(img.id)}
+                                            >
+                                              <Trash2 className="h-4 w-4" />
+                                            </Button>
+                                            <p className="text-xs text-center mt-1 text-muted-foreground">
+                                              Image {img.display_order + 1}
+                                            </p>
+                                          </div>
+                                        ))}
+                                      </div>
+                                    ) : (
+                                      <div className="bg-muted rounded-lg p-8 text-center text-muted-foreground">
+                                        <ImageIcon className="h-12 w-12 mx-auto mb-2 opacity-50" />
+                                        <p>No images uploaded yet</p>
+                                      </div>
+                                    );
+                                  })()}
+
                                   <div className="flex gap-2">
                                     <Button
                                       variant="outline"
@@ -465,21 +574,25 @@ const Admin = () => {
                                       className="flex-1"
                                     >
                                       <Upload className="mr-2 h-4 w-4" />
-                                      {uploadingImage ? "Uploading..." : "Upload New Image"}
+                                      {uploadingImage ? "Uploading..." : "Upload Images"}
                                     </Button>
                                     <input
                                       id={`file-upload-${editingItem.id}`}
                                       type="file"
                                       accept="image/jpeg,image/png,image/webp"
+                                      multiple
                                       className="hidden"
                                       onChange={(e) => {
-                                        const file = e.target.files?.[0];
-                                        if (file) handleImageUpload(file, editingItem.id);
+                                        const files = e.target.files;
+                                        if (files && files.length > 0) {
+                                          handleMultipleImageUpload(files, editingItem.id);
+                                          e.target.value = ''; // Reset input
+                                        }
                                       }}
                                     />
                                   </div>
                                   <p className="text-xs text-muted-foreground">
-                                    Max size: 5MB. Formats: JPG, PNG, WEBP
+                                    Max size: 5MB per file. Formats: JPG, PNG, WEBP. Select multiple files at once.
                                   </p>
                                 </div>
 
@@ -667,7 +780,8 @@ const Admin = () => {
                       </div>
                     </CardContent>
                   </Card>
-                ))}
+                  );
+                })}
               </div>
             </TabsContent>
           </Tabs>
