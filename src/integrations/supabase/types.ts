@@ -14,6 +14,33 @@ export type Database = {
   }
   public: {
     Tables: {
+      location_registrations: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          location: string
+          name: string
+          phone: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          location: string
+          name: string
+          phone?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          location?: string
+          name?: string
+          phone?: string | null
+        }
+        Relationships: []
+      }
       portfolio_images: {
         Row: {
           created_at: string
