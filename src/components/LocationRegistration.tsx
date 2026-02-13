@@ -52,7 +52,7 @@ const LocationRegistration = () => {
     <section id="locations" className="py-20 px-4">
       <div className="container mx-auto max-w-4xl text-center">
         <h2 className="text-4xl md:text-5xl font-orbitron font-bold mb-4 animate-fade-in-up">
-          Join the Crew
+          Stay in the Loop with the Fatt Man
         </h2>
         <p className="text-muted-foreground mb-12 text-lg">
           Register at your nearest location for exclusive promos, travel dates & flash deals.
