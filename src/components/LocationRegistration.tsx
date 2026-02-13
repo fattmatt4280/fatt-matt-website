@@ -83,7 +83,7 @@ const LocationRegistration = () => {
                   </h3>
                   <p className="text-muted-foreground text-sm mt-1">{loc.label}</p>
                 </div>
-                <span className="text-xs font-medium text-primary uppercase tracking-wider">
+                <span className="text-xs font-medium text-foreground uppercase tracking-wider">
                   {isRegistered ? "Registered ✓" : "Tap to Register"}
                 </span>
               </button>
