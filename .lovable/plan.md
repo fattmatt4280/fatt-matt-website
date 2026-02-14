@@ -1,24 +1,13 @@
 
 
-## Update Announcement Banner: Countdown + Registration CTA
+## Fix: Update Banner Deadline to April 30, 2026
 
-Replace the rotating announcements with a countdown timer to April 30, 2025 and a call-to-action pushing clients to register their preferred location.
+The banner is hidden because the current deadline is set to April 30, 2025, which has already passed. Update the year to 2026.
 
-### What Changes
+### Change
 
-**File: `src/components/AnnouncementBanner.tsx`**
+**File: `src/components/AnnouncementBanner.tsx`** (line 8)
+- Change `new Date(2025, 3, 30)` to `new Date(2026, 3, 30)`
 
-- Remove the rotating announcements array, `scrollPosition` state, and the interval `useEffect`
-- Add a countdown calculating days remaining until April 30, 2025 using `differenceInDays` from `date-fns` (already installed)
-- Display: **"XX days till Fatt Matt leaves the building! Register your location now!"**
-- Make "Register your location now!" a clickable link that smooth-scrolls to the `#locations` section
-- If the deadline has passed, auto-hide the banner
-- Keep the dismiss (X) button
-
-### Technical Details
-
-- Use `differenceInDays(new Date(2025, 3, 30), new Date())` for the countdown
-- Add an anchor or click handler with `document.getElementById('locations')?.scrollIntoView({ behavior: 'smooth' })` on the CTA text
-- Style the CTA portion with an underline or bold to make it stand out as clickable
-- Remove all scroll/carousel logic to simplify the component
+This one-line fix will immediately restore the banner with the correct countdown to April 30, 2026.
 
