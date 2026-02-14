@@ -1,13 +1,16 @@
 
 
-## Fix: Update Banner Deadline to April 30, 2026
+## Update Colorwork Portfolio Card Image
 
-The banner is hidden because the current deadline is set to April 30, 2025, which has already passed. Update the year to 2026.
+Replace the current Colorwork portfolio thumbnail with the uploaded vibrant color tattoo artwork, which better represents bold colorwork versus the current fineline-looking image.
 
-### Change
+### Changes
 
-**File: `src/components/AnnouncementBanner.tsx`** (line 8)
-- Change `new Date(2025, 3, 30)` to `new Date(2026, 3, 30)`
+1. **Copy the uploaded image into the project**
+   - Copy `user-uploads://IMG_6605.jpeg` to `src/assets/colorwork-portfolio.jpg`
 
-This one-line fix will immediately restore the banner with the correct countdown to April 30, 2026.
+2. **Update `src/components/Portfolio.tsx`**
+   - Import the new image: `import colorworkImage from "@/assets/colorwork-portfolio.jpg"`
+   - Replace `portfolio2` with `colorworkImage` in the Colorwork portfolio item
+   - The border styling already matches the other cards (all use the same `card-glow` class and hover border effect), so no border changes are needed
 
