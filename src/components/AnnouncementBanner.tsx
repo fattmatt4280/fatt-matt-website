@@ -1,50 +1,31 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { X } from "lucide-react";
 import { Button } from "./ui/button";
+import { differenceInDays } from "date-fns";
 
 const AnnouncementBanner = () => {
   const [isVisible, setIsVisible] = useState(true);
-  const [scrollPosition, setScrollPosition] = useState(0);
 
-  const announcements = [
-    "🎮 New Gaming Night Raffle - Win Exclusive Tattoo Session!",
-    "🎨 50% Off Small Tattoos This Month Only",
-    "🏆 Photo Contest: Show Your Ink & Win $500 Credit",
-    "🎁 Refer a Friend - Both Get 25% Off",
-    "⚡ Flash Sale: Walk-ins Welcome on Saturdays"
-  ];
+  const deadline = new Date(2025, 3, 30);
+  const daysLeft = differenceInDays(deadline, new Date());
 
-  useEffect(() => {
-    if (!isVisible) return;
+  if (!isVisible || daysLeft <= 0) return null;
 
-    const interval = setInterval(() => {
-      setScrollPosition((prev) => (prev + 1) % announcements.length);
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [isVisible, announcements.length]);
-
-  if (!isVisible) return null;
+  const scrollToLocations = () => {
+    document.getElementById("locations")?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div className="bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite] relative overflow-hidden">
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex-1 overflow-hidden">
-          <div
-            className="transition-transform duration-500 ease-in-out"
-            style={{ transform: `translateX(-${scrollPosition * 100}%)` }}
+        <div className="flex-1 text-center font-medium text-primary-foreground">
+          🔥 {daysLeft} days till Fatt Matt leaves the building!{" "}
+          <button
+            onClick={scrollToLocations}
+            className="underline font-bold hover:opacity-80 transition-opacity"
           >
-            <div className="flex whitespace-nowrap">
-              {announcements.map((announcement, index) => (
-                <div
-                  key={index}
-                  className="min-w-full text-center font-medium text-primary-foreground"
-                >
-                  {announcement}
-                </div>
-              ))}
-            </div>
-          </div>
+            Register your location now!
+          </button>
         </div>
         <Button
           variant="ghost"
