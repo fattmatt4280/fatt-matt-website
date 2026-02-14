@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import portfolio1 from "@/assets/portfolio-1.jpg";
-import portfolio2 from "@/assets/portfolio-2.jpg";
+import colorworkImage from "@/assets/colorwork-portfolio.jpg";
 import portfolio3 from "@/assets/portfolio-3.jpg";
 import portfolio4 from "@/assets/portfolio-4.jpg";
 
@@ -13,7 +13,7 @@ const portfolioItems = [
   },
   {
     title: "Colorwork",
-    image: portfolio2,
+    image: colorworkImage,
     description: "Vibrant and bold color tattoos",
     link: "/portfolio/colorwork"
   },
