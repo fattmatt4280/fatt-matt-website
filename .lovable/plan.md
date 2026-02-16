@@ -1,16 +1,19 @@
 
 
-## Update Colorwork Portfolio Card Image
+## Update Browser Tab Icon (Favicon)
 
-Replace the current Colorwork portfolio thumbnail with the uploaded vibrant color tattoo artwork, which better represents bold colorwork versus the current fineline-looking image.
+Copy your uploaded image to the public directory and update `index.html` to use it as the favicon.
 
-### Changes
+### Steps
 
-1. **Copy the uploaded image into the project**
-   - Copy `user-uploads://IMG_6605.jpeg` to `src/assets/colorwork-portfolio.jpg`
+1. Copy `user-uploads://8E5F7704-DD58-4DC5-9336-0F18D9DE6671.png` to `public/favicon.png`
+2. Update `index.html` to replace the existing favicon reference with:
+   ```html
+   <link rel="icon" href="/favicon.png" type="image/png">
+   ```
 
-2. **Update `src/components/Portfolio.tsx`**
-   - Import the new image: `import colorworkImage from "@/assets/colorwork-portfolio.jpg"`
-   - Replace `portfolio2` with `colorworkImage` in the Colorwork portfolio item
-   - The border styling already matches the other cards (all use the same `card-glow` class and hover border effect), so no border changes are needed
+### Technical Details
+
+- The existing `public/favicon.ico` will remain but will no longer be referenced
+- The new PNG favicon will display your FM tattoo machine logo in the browser tab
 
