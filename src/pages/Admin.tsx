@@ -9,7 +9,8 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import AdminGuard from "@/components/AdminGuard";
-import { LogOut, Save, Plus, Trash2, Upload, Image as ImageIcon } from "lucide-react";
+import { LogOut, Save, Plus, Trash2, Upload, Image as ImageIcon, Users, Mail, Phone, MapPin } from "lucide-react";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -41,6 +42,20 @@ interface PortfolioItem {
   notes: string | null;
 }
 
+interface LocationRegistration {
+  id: string;
+  name: string;
+  email: string;
+  phone: string | null;
+  location: string;
+  created_at: string;
+}
+
+const LOCATION_LABELS: Record<string, string> = {
+  "montgomery-il": "Montgomery, IL",
+  "portage-in": "Portage, IN",
+  "clearwater-fl": "Clearwater, FL",
+};
 interface PortfolioImage {
   id: string;
   portfolio_item_id: string;
@@ -74,6 +89,7 @@ const Admin = () => {
   const [editingItem, setEditingItem] = useState<PortfolioItem | null>(null);
   const [uploadingImage, setUploadingImage] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [subscribers, setSubscribers] = useState<LocationRegistration[]>([]);
 
   useEffect(() => {
     fetchData();
@@ -95,9 +111,15 @@ const Admin = () => {
       .select("*")
       .order("display_order");
 
+    const { data: registrations } = await supabase
+      .from("location_registrations")
+      .select("*")
+      .order("created_at", { ascending: false });
+
     if (content) setSiteContent(content);
     if (portfolio) setPortfolioItems(portfolio);
     if (images) setPortfolioImages(images);
+    if (registrations) setSubscribers(registrations);
   };
 
   const handleSignOut = async () => {
@@ -395,6 +417,10 @@ const Admin = () => {
             <TabsList>
               <TabsTrigger value="content">Site Content</TabsTrigger>
               <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
+              <TabsTrigger value="subscribers">
+                <Users className="mr-2 h-4 w-4" />
+                Subscribers
+              </TabsTrigger>
             </TabsList>
 
             <TabsContent value="content" className="space-y-4">
@@ -783,6 +809,72 @@ const Admin = () => {
                   );
                 })}
               </div>
+            </TabsContent>
+
+            <TabsContent value="subscribers" className="space-y-4">
+              <div className="flex justify-between items-center">
+                <h2 className="text-2xl font-bold">Subscribers</h2>
+                <Badge variant="secondary" className="text-sm">
+                  {subscribers.length} total
+                </Badge>
+              </div>
+
+              {subscribers.length === 0 ? (
+                <Card>
+                  <CardContent className="py-12 text-center">
+                    <Users className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
+                    <p className="text-muted-foreground">No subscribers yet.</p>
+                  </CardContent>
+                </Card>
+              ) : (
+                <Card>
+                  <CardContent className="p-0">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Name</TableHead>
+                          <TableHead>Email</TableHead>
+                          <TableHead>Phone</TableHead>
+                          <TableHead>Location</TableHead>
+                          <TableHead>Signed Up</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {subscribers.map((sub) => (
+                          <TableRow key={sub.id}>
+                            <TableCell className="font-medium">{sub.name}</TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-1.5">
+                                <Mail className="h-3.5 w-3.5 text-muted-foreground" />
+                                {sub.email}
+                              </div>
+                            </TableCell>
+                            <TableCell>
+                              {sub.phone ? (
+                                <div className="flex items-center gap-1.5">
+                                  <Phone className="h-3.5 w-3.5 text-muted-foreground" />
+                                  {sub.phone}
+                                </div>
+                              ) : (
+                                <span className="text-muted-foreground">—</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              <div className="flex items-center gap-1.5">
+                                <MapPin className="h-3.5 w-3.5 text-muted-foreground" />
+                                {LOCATION_LABELS[sub.location] || sub.location}
+                              </div>
+                            </TableCell>
+                            <TableCell className="text-muted-foreground">
+                              {new Date(sub.created_at).toLocaleDateString()}
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </CardContent>
+                </Card>
+              )}
             </TabsContent>
           </Tabs>
         </main>
