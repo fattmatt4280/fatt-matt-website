@@ -93,6 +93,26 @@ const Admin = () => {
 
   useEffect(() => {
     fetchData();
+
+    // Realtime subscription for new sign-ups
+    const channel = supabase
+      .channel('location_registrations-changes')
+      .on(
+        'postgres_changes',
+        {
+          event: '*',
+          schema: 'public',
+          table: 'location_registrations',
+        },
+        () => {
+          fetchData();
+        }
+      )
+      .subscribe();
+
+    return () => {
+      supabase.removeChannel(channel);
+    };
   }, []);
 
   const fetchData = async () => {
@@ -414,11 +434,11 @@ const Admin = () => {
 
         <main className="container py-8">
           <Tabs defaultValue="content" className="space-y-4">
-            <TabsList>
+            <TabsList className="w-full md:w-auto">
               <TabsTrigger value="content">Site Content</TabsTrigger>
               <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-              <TabsTrigger value="subscribers">
-                <Users className="mr-2 h-4 w-4" />
+              <TabsTrigger value="subscribers" className="flex items-center gap-2">
+                <Users className="h-4 w-4" />
                 Subscribers
               </TabsTrigger>
             </TabsList>
