@@ -34,6 +34,11 @@ const LocationRegistration = () => {
 
       if (error) throw error;
 
+      // Send confirmation email (fire-and-forget)
+      supabase.functions.invoke('send-registration-email', {
+        body: { name: formData.name.trim(), email: formData.email.trim(), location: selectedLocation },
+      }).catch((err) => console.error('Email send error:', err));
+
       setRegistered((prev) => [...prev, selectedLocation]);
       setFormData({ name: "", email: "", phone: "" });
       setSelectedLocation(null);
