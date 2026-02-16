@@ -9,7 +9,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useToast } from "@/hooks/use-toast";
 import AdminGuard from "@/components/AdminGuard";
-import { LogOut, Save, Plus, Trash2, Upload, Image as ImageIcon, Users, Mail, Phone, MapPin } from "lucide-react";
+import { LogOut, Save, Plus, Trash2, Upload, Image as ImageIcon, Users, Mail, Phone, MapPin, Send } from "lucide-react";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
@@ -90,6 +90,11 @@ const Admin = () => {
   const [uploadingImage, setUploadingImage] = useState(false);
   const [dialogOpen, setDialogOpen] = useState(false);
   const [subscribers, setSubscribers] = useState<LocationRegistration[]>([]);
+  const [massEmailSubject, setMassEmailSubject] = useState("");
+  const [massEmailBody, setMassEmailBody] = useState("");
+  const [massEmailLocations, setMassEmailLocations] = useState<string[]>([]);
+  const [sendingMassEmail, setSendingMassEmail] = useState(false);
+  const [showComposeEmail, setShowComposeEmail] = useState(false);
 
   useEffect(() => {
     fetchData();
@@ -416,6 +421,51 @@ const Admin = () => {
       });
     } finally {
       setLoading(false);
+    }
+  };
+
+  const handleSendMassEmail = async () => {
+    if (!massEmailSubject.trim() || !massEmailBody.trim() || massEmailLocations.length === 0) {
+      toast({
+        title: "Missing fields",
+        description: "Please fill in subject, body, and select at least one location.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    const recipientCount = subscribers.filter(s => massEmailLocations.includes(s.location)).length;
+    if (!confirm(`Send this email to ${recipientCount} subscriber(s)?`)) return;
+
+    setSendingMassEmail(true);
+    try {
+      const { data, error } = await supabase.functions.invoke('send-mass-email', {
+        body: {
+          subject: massEmailSubject.trim(),
+          body: massEmailBody.trim(),
+          locations: massEmailLocations,
+        },
+      });
+
+      if (error) throw error;
+
+      toast({
+        title: "Emails sent!",
+        description: `${data.sent} email(s) sent successfully${data.failed > 0 ? `, ${data.failed} failed` : ''}.`,
+      });
+
+      setMassEmailSubject("");
+      setMassEmailBody("");
+      setMassEmailLocations([]);
+      setShowComposeEmail(false);
+    } catch (error: any) {
+      toast({
+        title: "Error",
+        description: error.message || "Failed to send emails",
+        variant: "destructive",
+      });
+    } finally {
+      setSendingMassEmail(false);
     }
   };
 
@@ -834,10 +884,104 @@ const Admin = () => {
             <TabsContent value="subscribers" className="space-y-4">
               <div className="flex justify-between items-center">
                 <h2 className="text-2xl font-bold">Subscribers</h2>
-                <Badge variant="secondary" className="text-sm">
-                  {subscribers.length} total
-                </Badge>
+                <div className="flex items-center gap-2">
+                  <Badge variant="secondary" className="text-sm">
+                    {subscribers.length} total
+                  </Badge>
+                  <Button onClick={() => setShowComposeEmail(!showComposeEmail)} variant="neon">
+                    <Send className="mr-2 h-4 w-4" />
+                    {showComposeEmail ? "Hide Composer" : "Mass Email"}
+                  </Button>
+                </div>
               </div>
+
+              {showComposeEmail && (
+                <Card className="border-primary/30">
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <Mail className="h-5 w-5" />
+                      Compose Mass Email
+                    </CardTitle>
+                    <CardDescription>Send a custom email to subscribers by location</CardDescription>
+                  </CardHeader>
+                  <CardContent className="space-y-4">
+                    <div className="space-y-2">
+                      <Label>Send to locations</Label>
+                      <div className="flex flex-wrap gap-2">
+                        {Object.entries(LOCATION_LABELS).map(([key, label]) => {
+                          const count = subscribers.filter(s => s.location === key).length;
+                          const isSelected = massEmailLocations.includes(key);
+                          return (
+                            <Button
+                              key={key}
+                              variant={isSelected ? "default" : "outline"}
+                              size="sm"
+                              onClick={() => {
+                                setMassEmailLocations(prev =>
+                                  isSelected ? prev.filter(l => l !== key) : [...prev, key]
+                                );
+                              }}
+                              className="gap-1.5"
+                            >
+                              <MapPin className="h-3.5 w-3.5" />
+                              {label}
+                              <Badge variant={isSelected ? "secondary" : "outline"} className="ml-1 text-xs">
+                                {count}
+                              </Badge>
+                            </Button>
+                          );
+                        })}
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={() => {
+                            if (massEmailLocations.length === Object.keys(LOCATION_LABELS).length) {
+                              setMassEmailLocations([]);
+                            } else {
+                              setMassEmailLocations(Object.keys(LOCATION_LABELS));
+                            }
+                          }}
+                        >
+                          {massEmailLocations.length === Object.keys(LOCATION_LABELS).length ? "Deselect All" : "Select All"}
+                        </Button>
+                      </div>
+                      {massEmailLocations.length > 0 && (
+                        <p className="text-sm text-muted-foreground">
+                          {subscribers.filter(s => massEmailLocations.includes(s.location)).length} recipient(s)
+                        </p>
+                      )}
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Subject</Label>
+                      <Input
+                        value={massEmailSubject}
+                        onChange={(e) => setMassEmailSubject(e.target.value)}
+                        placeholder="e.g. Flash Sale This Weekend! 🔥"
+                        maxLength={200}
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label>Email Body</Label>
+                      <Textarea
+                        value={massEmailBody}
+                        onChange={(e) => setMassEmailBody(e.target.value)}
+                        placeholder="Write your message here... (line breaks will be preserved)"
+                        rows={8}
+                        maxLength={10000}
+                      />
+                    </div>
+                    <Button
+                      onClick={handleSendMassEmail}
+                      disabled={sendingMassEmail || !massEmailSubject.trim() || !massEmailBody.trim() || massEmailLocations.length === 0}
+                      variant="neon"
+                      className="w-full"
+                    >
+                      <Send className="mr-2 h-4 w-4" />
+                      {sendingMassEmail ? "Sending..." : "Send Email"}
+                    </Button>
+                  </CardContent>
+                </Card>
+              )}
 
               {subscribers.length === 0 ? (
                 <Card>
