@@ -7,6 +7,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import { DreamBookingWidget } from "@/components/DreamBookingWidget";
 
 const Booking = () => {
   const [formData, setFormData] = useState({
@@ -96,6 +97,15 @@ const Booking = () => {
         <p className="text-center text-muted-foreground mb-12 text-lg">
           Ready to bring your vision to life? Let's connect.
         </p>
+
+        {/* DreamBookings AI Widget */}
+        <div className="flex justify-center mb-12">
+          <DreamBookingWidget
+            artistId="fatt-matt"
+            accentColor="#7c3aed"
+            ctaLabel="Quick AI Consult"
+          />
+        </div>
         
         <div className="card-glow rounded-xl p-6 md:p-10 animate-fade-in-up">
           <Tabs defaultValue="manual" className="w-full">
