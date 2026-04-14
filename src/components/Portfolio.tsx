@@ -20,7 +20,7 @@ const Portfolio = () => {
   return (
     <section id="portfolio" className="py-24 px-4 relative overflow-hidden">
       {/* Background orbs */}
-      <div className="orb w-[600px] h-[600px] bg-red-900/8 top-0 left-1/2 -translate-x-1/2 animate-orb-drift" style={{ animationDelay: "-3s" }} />
+      <div className="orb w-[600px] h-[600px] bg-white/3 top-0 left-1/2 -translate-x-1/2 animate-orb-drift" style={{ animationDelay: "-3s" }} />
 
       <div className="container mx-auto">
         <h2
@@ -54,7 +54,7 @@ const Portfolio = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-background/95 via-background/40 to-transparent transition-opacity duration-500" />
 
               {/* Iridescent hover border */}
-              <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-primary/60 transition-all duration-500 group-hover:shadow-[0_0_30px_hsl(0_85%_50%/0.3),inset_0_0_30px_hsl(0_85%_50%/0.05)]" />
+              <div className="absolute inset-0 rounded-2xl border-2 border-transparent group-hover:border-white/20 transition-all duration-500 group-hover:shadow-[0_0_30px_hsl(0_0%_60%/0.15),inset_0_0_30px_hsl(0_0%_100%/0.03)]" />
 
               {/* Shine sweep on hover */}
               <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-700 pointer-events-none"

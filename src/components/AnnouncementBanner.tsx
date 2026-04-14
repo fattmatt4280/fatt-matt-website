@@ -16,7 +16,7 @@ const AnnouncementBanner = () => {
   };
 
   return (
-    <div className="bg-gradient-to-r from-primary via-accent to-primary bg-[length:200%_100%] animate-[shimmer_3s_linear_infinite] relative overflow-hidden">
+    <div className="relative overflow-hidden" style={{ background: "linear-gradient(90deg, hsl(0 0% 10%), hsl(0 0% 16%), hsl(0 0% 10%))", backgroundSize: "200% 100%", animation: "shimmer 4s linear infinite" }}>
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
         <div className="flex-1 text-center font-medium text-primary-foreground">
           🔥 {daysLeft} days till Fatt Matt leaves the building!{" "}

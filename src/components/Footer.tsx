@@ -11,7 +11,7 @@ const Footer = () => {
               href="https://instagram.com/fattmatt444"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center hover:bg-primary/10 transition-all duration-300 hover:shadow-[0_0_20px_rgba(138,43,226,0.6)]"
+              className="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-white/8 transition-all duration-300 hover:shadow-[0_0_20px_hsl(0_0%_60%/0.2)]"
               aria-label="Instagram"
             >
               <Instagram className="w-5 h-5" />
@@ -20,7 +20,7 @@ const Footer = () => {
               href="https://www.tiktok.com/@fattmatt444?_r=1&_t=ZT-91AxAmL4znB"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center hover:bg-primary/10 transition-all duration-300 hover:shadow-[0_0_20px_rgba(138,43,226,0.6)]"
+              className="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-white/8 transition-all duration-300 hover:shadow-[0_0_20px_hsl(0_0%_60%/0.2)]"
               aria-label="TikTok"
             >
               <Music className="w-5 h-5" />
@@ -29,7 +29,7 @@ const Footer = () => {
               href="https://www.facebook.com/share/1G1qdtGHKi/?mibextid=wwXIfr"
               target="_blank"
               rel="noopener noreferrer"
-              className="w-12 h-12 rounded-full border-2 border-primary flex items-center justify-center hover:bg-primary/10 transition-all duration-300 hover:shadow-[0_0_20px_rgba(138,43,226,0.6)]"
+              className="w-12 h-12 rounded-full glass-card flex items-center justify-center hover:bg-white/8 transition-all duration-300 hover:shadow-[0_0_20px_hsl(0_0%_60%/0.2)]"
               aria-label="Facebook"
             >
               <Facebook className="w-5 h-5" />
@@ -37,7 +37,7 @@ const Footer = () => {
           </div>
           
           {/* Divider with gradient */}
-          <div className="w-full max-w-md h-[2px] bg-gradient-to-r from-transparent via-primary to-transparent" />
+          <div className="w-full max-w-md h-px bg-gradient-to-r from-transparent via-white/20 to-transparent" />
           
           {/* Copyright */}
           <p className="text-muted-foreground text-center">

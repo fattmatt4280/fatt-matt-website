@@ -15,8 +15,8 @@ const About = () => {
   return (
     <section id="about" className="py-24 px-4 relative overflow-hidden">
       {/* Background orbs */}
-      <div className="orb w-[500px] h-[500px] bg-red-800/10 -top-40 -right-60 animate-orb-drift" style={{ animationDelay: "-5s" }} />
-      <div className="orb w-80 h-80 bg-orange-700/10 bottom-0 -left-40 animate-orb-drift" style={{ animationDelay: "-12s" }} />
+      <div className="orb w-[500px] h-[500px] bg-white/3 -top-40 -right-60 animate-orb-drift" style={{ animationDelay: "-5s" }} />
+      <div className="orb w-80 h-80 bg-white/2 bottom-0 -left-40 animate-orb-drift" style={{ animationDelay: "-12s" }} />
 
       <div className="container mx-auto max-w-4xl">
         {/* Main card */}
@@ -46,7 +46,7 @@ const About = () => {
                   className="glass-card rounded-xl p-4 md:p-6 text-center delay-[${i * 100}ms]"
                   style={{ transitionDelay: `${i * 0.1 + 0.2}s` }}
                 >
-                  <div className="text-3xl md:text-4xl font-orbitron font-bold neon-text">
+                  <div className="text-3xl md:text-4xl font-orbitron font-bold chrome-text">
                     {stat.value}
                     <span className="text-xl">{stat.suffix}</span>
                   </div>

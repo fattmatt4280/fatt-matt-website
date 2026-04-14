@@ -144,8 +144,8 @@ const Hero = () => {
         <InkParticles />
 
         {/* Floating orbs */}
-        <div className="orb w-96 h-96 bg-red-600/20 top-20 -left-32 animate-orb-drift" style={{ animationDelay: "0s" }} />
-        <div className="orb w-64 h-64 bg-orange-500/15 bottom-40 right-10 animate-orb-drift" style={{ animationDelay: "-7s" }} />
+        <div className="orb w-96 h-96 bg-white/5 top-20 -left-32 animate-orb-drift" style={{ animationDelay: "0s" }} />
+        <div className="orb w-64 h-64 bg-white/4 bottom-40 right-10 animate-orb-drift" style={{ animationDelay: "-7s" }} />
 
         {/* Title */}
         <div className="absolute bottom-0 left-0 right-0 z-20 pb-8 md:pb-12">
@@ -160,7 +160,7 @@ const Hero = () => {
             <p
               className="text-lg md:text-xl font-inter animate-[fade-in-up_0.6s_ease-out_1s_both]"
               style={{
-                background: "linear-gradient(135deg, hsl(0 85% 55%), hsl(35 100% 58%))",
+                background: "linear-gradient(135deg, hsl(0 0% 55%), hsl(0 0% 85%), hsl(0 0% 60%))",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
                 backgroundClip: "text",
@@ -187,7 +187,7 @@ const Hero = () => {
               key={stat.label}
               className="glass-card rounded-full px-6 py-2 text-center min-w-[90px]"
             >
-              <div className="text-xl font-orbitron font-bold neon-text">{stat.value}</div>
+              <div className="text-xl font-orbitron font-bold chrome-text">{stat.value}</div>
               <div className="text-xs text-muted-foreground">{stat.label}</div>
             </div>
           ))}

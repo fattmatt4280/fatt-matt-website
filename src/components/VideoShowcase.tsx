@@ -14,7 +14,7 @@ const VideoShowcase = () => {
   return (
     <section id="video" className="py-24 px-4 relative overflow-hidden">
       {/* Background orbs */}
-      <div className="orb w-[700px] h-[700px] bg-red-800/8 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-orb-drift" style={{ animationDelay: "-8s" }} />
+      <div className="orb w-[700px] h-[700px] bg-white/3 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-orb-drift" style={{ animationDelay: "-8s" }} />
 
       <div className="container mx-auto max-w-4xl">
         <h2
@@ -56,10 +56,10 @@ const VideoShowcase = () => {
           )}
 
           {/* Corner accents */}
-          <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-primary/60 rounded-tl-2xl pointer-events-none" />
-          <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-primary/60 rounded-tr-2xl pointer-events-none" />
-          <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-primary/60 rounded-bl-2xl pointer-events-none" />
-          <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-primary/60 rounded-br-2xl pointer-events-none" />
+          <div className="absolute top-0 left-0 w-10 h-10 border-t-2 border-l-2 border-white/25 rounded-tl-2xl pointer-events-none" />
+          <div className="absolute top-0 right-0 w-10 h-10 border-t-2 border-r-2 border-white/25 rounded-tr-2xl pointer-events-none" />
+          <div className="absolute bottom-0 left-0 w-10 h-10 border-b-2 border-l-2 border-white/25 rounded-bl-2xl pointer-events-none" />
+          <div className="absolute bottom-0 right-0 w-10 h-10 border-b-2 border-r-2 border-white/25 rounded-br-2xl pointer-events-none" />
         </div>
 
         <p className="text-center text-muted-foreground text-sm mt-6">
