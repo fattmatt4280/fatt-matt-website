@@ -23,11 +23,15 @@ type Props = {
   apiUrl?: string;
 };
 
+const DEFAULT_API_URL =
+  (typeof import.meta !== "undefined" && (import.meta as any).env?.VITE_DREAM_BOOKINGS_URL) ||
+  "http://localhost:3001";
+
 export function DreamBookingWidget({
   artistId = "demo",
   accentColor = "#7c3aed",
   ctaLabel = "Book a Consultation",
-  apiUrl = "http://localhost:3001",
+  apiUrl = DEFAULT_API_URL,
 }: Props) {
   const [step, setStep] = useState<WidgetStep>("idle");
   const [formData, setFormData] = useState({ name: "", email: "", description: "" });

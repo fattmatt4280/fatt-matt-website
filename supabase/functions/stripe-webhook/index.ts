@@ -50,14 +50,14 @@ const handler = async (req: Request): Promise<Response> => {
       console.log('Metadata:', session.metadata);
 
       // Extract booking details from metadata
-      const { name, email, message, location, consultType } = session.metadata || {};
+      const { name, email, phone, message, location, bodyLocation, consultType } = session.metadata || {};
 
       if (!name || !email) {
         console.error('Missing required metadata');
         return new Response('Missing metadata', { status: 400 });
       }
 
-      // Call the send-booking-email function
+      // 1. Send booking confirmation email
       const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
       const supabaseKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
       const supabase = createClient(supabaseUrl, supabaseKey);
@@ -80,6 +80,43 @@ const handler = async (req: Request): Promise<Response> => {
       }
 
       console.log('Booking email sent successfully');
+
+      // 2. Register consultation in dream-bookings so agents + calendar can see it
+      const dreamBookingsUrl = Deno.env.get('DREAM_BOOKINGS_API_URL');
+      const dreamBookingsKey = Deno.env.get('DREAM_BOOKINGS_INTERNAL_KEY');
+
+      if (dreamBookingsUrl && dreamBookingsKey) {
+        try {
+          const dbRes = await fetch(`${dreamBookingsUrl}/api/consultations/from-stripe`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'x-api-key': dreamBookingsKey,
+            },
+            body: JSON.stringify({
+              stripeSessionId: session.id,
+              name,
+              email,
+              phone: phone || null,
+              message: message || null,
+              location: location || null,
+              bodyLocation: bodyLocation || null,
+              consultType: consultType || null,
+            }),
+          });
+          if (dbRes.ok) {
+            const dbData = await dbRes.json();
+            console.log('Dream-bookings consultation created:', dbData.consultationId);
+          } else {
+            console.error('Dream-bookings registration failed:', await dbRes.text());
+          }
+        } catch (dbErr) {
+          // Non-fatal — email already sent, don't fail the webhook
+          console.error('Dream-bookings call error (non-fatal):', dbErr);
+        }
+      } else {
+        console.log('DREAM_BOOKINGS_API_URL not set — skipping calendar registration');
+      }
     }
 
     return new Response(JSON.stringify({ received: true }), {

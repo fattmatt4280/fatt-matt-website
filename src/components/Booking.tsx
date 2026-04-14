@@ -16,14 +16,16 @@ const Booking = () => {
     phone: "",
     message: "",
     location: "Montgomery IL",
-    bodyLocation: ""
+    bodyLocation: "",
+    sessionLength: "half-day"
   });
   const [aiFormData, setAiFormData] = useState({
     name: "",
     email: "",
     phone: "",
     idea: "",
-    bodyLocation: ""
+    bodyLocation: "",
+    sessionLength: "half-day"
   });
   const [selectedFiles, setSelectedFiles] = useState<FileList | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -40,6 +42,7 @@ const Booking = () => {
         message: aiFormData.idea,
         location: "Not specified",
         bodyLocation: aiFormData.bodyLocation,
+        sessionLength: aiFormData.sessionLength,
         consultType,
       } : {
         ...formData,
@@ -187,6 +190,22 @@ const Booking = () => {
                   </Select>
                 </div>
                 <div>
+                  <Label htmlFor="ai-session-length">Session Length</Label>
+                  <Select
+                    value={aiFormData.sessionLength}
+                    onValueChange={(value) => setAiFormData({ ...aiFormData, sessionLength: value })}
+                    required
+                  >
+                    <SelectTrigger className="bg-muted/50 border-border">
+                      <SelectValue placeholder="Select session length" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border-border z-50">
+                      <SelectItem value="half-day">Half Day / Under 4hrs — $100 deposit</SelectItem>
+                      <SelectItem value="full-day">Full Day — $200 deposit</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
                   <Label htmlFor="ai-idea">Tattoo Idea Description</Label>
                   <Textarea
                     id="ai-idea"
@@ -311,6 +330,22 @@ const Booking = () => {
                       <SelectItem value="neck-throat">NECK - Throat</SelectItem>
                       <SelectItem value="head-full">HEAD - Full Head</SelectItem>
                       <SelectItem value="head-face">HEAD - Face</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="session-length">Session Length</Label>
+                  <Select
+                    value={formData.sessionLength}
+                    onValueChange={(value) => setFormData({ ...formData, sessionLength: value })}
+                    required
+                  >
+                    <SelectTrigger className="bg-muted/50 border-border">
+                      <SelectValue placeholder="Select session length" />
+                    </SelectTrigger>
+                    <SelectContent className="bg-background border-border z-50">
+                      <SelectItem value="half-day">Half Day / Under 4hrs — $100 deposit</SelectItem>
+                      <SelectItem value="full-day">Full Day — $200 deposit</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
