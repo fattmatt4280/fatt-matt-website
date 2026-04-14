@@ -388,6 +388,116 @@
 }
 
 /* ─────────────────────────────────────────────
+   FORM ELEMENT DEFINITION + PULSE GLOW
+───────────────────────────────────────────── */
+
+@keyframes field-pulse {
+  0%, 100% {
+    border-color: hsl(0 0% 22%);
+    box-shadow: 0 0 0 0 transparent;
+  }
+  50% {
+    border-color: hsl(0 0% 38%);
+    box-shadow: 0 0 8px hsl(0 0% 60% / 0.12), inset 0 1px 0 hsl(0 0% 100% / 0.04);
+  }
+}
+
+@keyframes border-travel {
+  0%   { box-shadow: 2px 0 8px hsl(0 0% 70% / 0.15),  0 0 0 1px hsl(0 0% 22%); }
+  25%  { box-shadow: 0 2px 8px hsl(0 0% 70% / 0.15),  0 0 0 1px hsl(0 0% 28%); }
+  50%  { box-shadow: -2px 0 8px hsl(0 0% 70% / 0.15), 0 0 0 1px hsl(0 0% 22%); }
+  75%  { box-shadow: 0 -2px 8px hsl(0 0% 70% / 0.15), 0 0 0 1px hsl(0 0% 28%); }
+  100% { box-shadow: 2px 0 8px hsl(0 0% 70% / 0.15),  0 0 0 1px hsl(0 0% 22%); }
+}
+
+/* Inputs */
+input[class*="border-input"],
+input[class*="border-border"] {
+  border-color: hsl(0 0% 22%) !important;
+  animation: field-pulse 3s ease-in-out infinite;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+input[class*="border-input"]:focus,
+input[class*="border-border"]:focus {
+  border-color: hsl(0 0% 55%) !important;
+  box-shadow: 0 0 0 1px hsl(0 0% 40% / 0.4), 0 0 12px hsl(0 0% 60% / 0.15) !important;
+  animation: none;
+}
+
+/* Textareas */
+textarea[class*="border-input"],
+textarea[class*="border-border"] {
+  border-color: hsl(0 0% 22%) !important;
+  animation: field-pulse 3s ease-in-out infinite;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+textarea[class*="border-input"]:focus,
+textarea[class*="border-border"]:focus {
+  border-color: hsl(0 0% 55%) !important;
+  box-shadow: 0 0 0 1px hsl(0 0% 40% / 0.4), 0 0 12px hsl(0 0% 60% / 0.15) !important;
+  animation: none;
+}
+
+/* Native selects (session length, location dropdowns) */
+select {
+  border-color: hsl(0 0% 22%) !important;
+  animation: field-pulse 3s ease-in-out infinite;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+select:focus {
+  border-color: hsl(0 0% 55%) !important;
+  box-shadow: 0 0 0 1px hsl(0 0% 40% / 0.4), 0 0 12px hsl(0 0% 60% / 0.15) !important;
+  outline: none !important;
+  animation: none;
+}
+
+/* Radix Select trigger */
+button[class*="SelectTrigger"],
+[data-radix-select-trigger] {
+  border-color: hsl(0 0% 22%) !important;
+  animation: field-pulse 3s ease-in-out infinite;
+}
+button[class*="SelectTrigger"]:focus,
+[data-radix-select-trigger]:focus {
+  animation: none;
+  border-color: hsl(0 0% 55%) !important;
+  box-shadow: 0 0 0 1px hsl(0 0% 40% / 0.4) !important;
+}
+
+/* Tabs list container */
+[role="tablist"] {
+  background: hsl(0 0% 8%) !important;
+  border: 1px solid hsl(0 0% 18%) !important;
+  animation: field-pulse 4s ease-in-out infinite;
+}
+
+/* Inactive tab */
+[role="tab"] {
+  color: hsl(0 0% 50%) !important;
+  transition: color 0.2s, background 0.2s, box-shadow 0.2s !important;
+}
+[role="tab"]:hover {
+  color: hsl(0 0% 75%) !important;
+  background: hsl(0 0% 12%) !important;
+}
+
+/* Active tab */
+[role="tab"][data-state="active"] {
+  background: linear-gradient(180deg, hsl(0 0% 20%) 0%, hsl(0 0% 13%) 100%) !important;
+  color: hsl(0 0% 95%) !important;
+  box-shadow:
+    inset 0 1px 0 hsl(0 0% 55% / 0.3),
+    inset 0 -1px 0 hsl(0 0% 0% / 0.4),
+    0 0 0 1px hsl(0 0% 30% / 0.5) !important;
+}
+
+/* Card/form containers — subtle travelling border pulse */
+.card-glow,
+.glass-card-glow {
+  animation: border-travel 6s linear infinite;
+}
+
+/* ─────────────────────────────────────────────
    LEGACY / COMPAT
 ───────────────────────────────────────────── */
 
