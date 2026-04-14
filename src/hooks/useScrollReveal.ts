@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 
-export function useScrollReveal(threshold = 0.15) {
+export function useScrollReveal(threshold = 0.05) {
   const ref = useRef<HTMLElement>(null);
 
   useEffect(() => {
@@ -14,7 +14,7 @@ export function useScrollReveal(threshold = 0.15) {
           observer.unobserve(el);
         }
       },
-      { threshold }
+      { threshold, rootMargin: "0px 0px -40px 0px" }
     );
 
     observer.observe(el);

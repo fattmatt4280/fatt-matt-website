@@ -270,26 +270,30 @@
 
 .reveal {
   opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  transform: translateY(30px);
+  transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  will-change: opacity, transform;
 }
 .reveal.visible { opacity: 1; transform: translateY(0); }
 
 .reveal-left {
-  opacity: 0; transform: translateX(-40px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  opacity: 0; transform: translateX(-30px);
+  transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  will-change: opacity, transform;
 }
 .reveal-left.visible { opacity: 1; transform: translateX(0); }
 
 .reveal-right {
-  opacity: 0; transform: translateX(40px);
-  transition: opacity 0.7s cubic-bezier(0.16,1,0.3,1), transform 0.7s cubic-bezier(0.16,1,0.3,1);
+  opacity: 0; transform: translateX(30px);
+  transition: opacity 0.5s cubic-bezier(0.16,1,0.3,1), transform 0.5s cubic-bezier(0.16,1,0.3,1);
+  will-change: opacity, transform;
 }
 .reveal-right.visible { opacity: 1; transform: translateX(0); }
 
 .reveal-scale {
-  opacity: 0; transform: scale(0.92) translateY(20px);
-  transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+  opacity: 0; transform: scale(0.94) translateY(16px);
+  transition: opacity 0.45s cubic-bezier(0.16,1,0.3,1), transform 0.45s cubic-bezier(0.16,1,0.3,1);
+  will-change: opacity, transform;
 }
 .reveal-scale.visible { opacity: 1; transform: scale(1) translateY(0); }
 
@@ -359,6 +363,7 @@
 .tilt-card {
   transform-style: preserve-3d;
   transition: transform 0.3s cubic-bezier(0.23,1,0.32,1), box-shadow 0.3s ease;
+  will-change: transform;
 }
 .tilt-card:hover {
   transform: perspective(800px) rotateY(-4deg) rotateX(2deg) translateZ(8px);
@@ -385,6 +390,7 @@
   filter: blur(60px);
   pointer-events: none;
   animation: orb-drift 20s ease-in-out infinite;
+  will-change: transform;
 }
 
 /* ─────────────────────────────────────────────
@@ -513,7 +519,7 @@ button[class*="SelectTrigger"]:focus,
   box-shadow: 0 0 10px hsl(var(--primary) / 0.3);
 }
 
-.animate-float      { animation: float 6s ease-in-out infinite; }
-.animate-float-slow { animation: float-slow 10s ease-in-out infinite; }
-.animate-pulse-glow { animation: pulse-chrome 2.5s ease-in-out infinite; }
-.animate-fade-in-up { animation: fade-in-up 0.6s ease-out both; }
+.animate-float      { animation: float 6s ease-in-out infinite; will-change: transform; }
+.animate-float-slow { animation: float-slow 10s ease-in-out infinite; will-change: transform; }
+.animate-pulse-glow { animation: pulse-chrome 2.5s ease-in-out infinite; will-change: box-shadow; }
+.animate-fade-in-up { animation: fade-in-up 0.6s ease-out both; will-change: opacity, transform; }
