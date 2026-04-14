@@ -18,11 +18,11 @@ const AnnouncementBanner = () => {
   return (
     <div className="relative overflow-hidden" style={{ background: "linear-gradient(90deg, hsl(0 0% 10%), hsl(0 0% 16%), hsl(0 0% 10%))", backgroundSize: "200% 100%", animation: "shimmer 4s linear infinite" }}>
       <div className="container mx-auto px-4 py-3 flex items-center justify-between">
-        <div className="flex-1 text-center font-medium text-primary-foreground">
+        <div className="flex-1 text-center font-medium text-white">
           🔥 {daysLeft} days till Fatt Matt leaves the building!{" "}
           <button
             onClick={scrollToLocations}
-            className="underline font-bold hover:opacity-80 transition-opacity"
+            className="underline font-bold hover:opacity-80 transition-opacity text-white"
           >
             Register your location now!
           </button>
@@ -31,7 +31,7 @@ const AnnouncementBanner = () => {
           variant="ghost"
           size="icon"
           onClick={() => setIsVisible(false)}
-          className="ml-4 text-primary-foreground hover:bg-primary-foreground/20"
+          className="ml-4 text-white hover:bg-white/10"
           aria-label="Close announcement"
         >
           <X className="h-4 w-4" />

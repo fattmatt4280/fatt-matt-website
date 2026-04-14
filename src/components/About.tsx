@@ -15,8 +15,6 @@ const About = () => {
   return (
     <section id="about" className="py-24 px-4 relative overflow-hidden">
       {/* Background orbs */}
-      <div className="orb w-[500px] h-[500px] bg-white/3 -top-40 -right-60 animate-orb-drift" style={{ animationDelay: "-5s" }} />
-      <div className="orb w-80 h-80 bg-white/2 bottom-0 -left-40 animate-orb-drift" style={{ animationDelay: "-12s" }} />
 
       <div className="container mx-auto max-w-4xl">
         {/* Main card */}

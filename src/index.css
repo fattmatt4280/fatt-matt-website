@@ -299,8 +299,8 @@
 
 .glass-card {
   background: linear-gradient(135deg, hsl(0 0% 100% / 0.04), hsl(0 0% 100% / 0.02));
-  backdrop-filter: blur(20px) saturate(150%);
-  -webkit-backdrop-filter: blur(20px) saturate(150%);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
   border: 1px solid hsl(0 0% 100% / 0.08);
   box-shadow:
     0 8px 32px hsl(0 0% 0% / 0.5),
@@ -310,8 +310,8 @@
 
 .glass-card-glow {
   background: linear-gradient(135deg, hsl(0 0% 100% / 0.05), hsl(0 0% 100% / 0.02));
-  backdrop-filter: blur(24px) saturate(160%);
-  -webkit-backdrop-filter: blur(24px) saturate(160%);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
   border: 1px solid hsl(0 0% 100% / 0.1);
   box-shadow:
     0 8px 48px hsl(0 0% 0% / 0.6),

@@ -14,7 +14,6 @@ const VideoShowcase = () => {
   return (
     <section id="video" className="py-24 px-4 relative overflow-hidden">
       {/* Background orbs */}
-      <div className="orb w-[700px] h-[700px] bg-white/3 top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 animate-orb-drift" style={{ animationDelay: "-8s" }} />
 
       <div className="container mx-auto max-w-4xl">
         <h2

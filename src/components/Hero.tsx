@@ -38,15 +38,18 @@ function InkParticles() {
 
     const particles: Particle[] = [];
 
+    const MAX_PARTICLES = 40;
+
     const spawn = () => {
+      if (particles.length >= MAX_PARTICLES) return;
       particles.push({
         x: Math.random() * canvas.width,
         y: canvas.height + 10,
-        vx: (Math.random() - 0.5) * 0.6,
-        vy: -(Math.random() * 1.2 + 0.4),
-        r: Math.random() * 3 + 1,
-        alpha: Math.random() * 0.5 + 0.2,
-        decay: Math.random() * 0.003 + 0.002,
+        vx: (Math.random() - 0.5) * 0.5,
+        vy: -(Math.random() * 0.9 + 0.3),
+        r: Math.random() * 2.5 + 0.8,
+        alpha: Math.random() * 0.4 + 0.15,
+        decay: Math.random() * 0.004 + 0.003,
         color: colors[Math.floor(Math.random() * colors.length)],
       });
     };
@@ -57,7 +60,7 @@ function InkParticles() {
     const tick = () => {
       animId = requestAnimationFrame(tick);
       frame++;
-      if (frame % 3 === 0) spawn();
+      if (frame % 6 === 0) spawn(); // spawn half as often
 
       ctx.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -75,12 +78,6 @@ function InkParticles() {
         ctx.beginPath();
         ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
         ctx.fillStyle = `rgba(${p.color}, ${p.alpha})`;
-        ctx.fill();
-
-        // soft glow
-        ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r * 3, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(${p.color}, ${p.alpha * 0.12})`;
         ctx.fill();
       }
     };

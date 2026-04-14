@@ -20,7 +20,6 @@ const Portfolio = () => {
   return (
     <section id="portfolio" className="py-24 px-4 relative overflow-hidden">
       {/* Background orbs */}
-      <div className="orb w-[600px] h-[600px] bg-white/3 top-0 left-1/2 -translate-x-1/2 animate-orb-drift" style={{ animationDelay: "-3s" }} />
 
       <div className="container mx-auto">
         <h2
