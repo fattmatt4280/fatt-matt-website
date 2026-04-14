@@ -6,7 +6,7 @@ import { differenceInDays } from "date-fns";
 const AnnouncementBanner = () => {
   const [isVisible, setIsVisible] = useState(true);
 
-  const deadline = new Date(2026, 3, 30);
+  const deadline = new Date(2026, 3, 20);
   const daysLeft = differenceInDays(deadline, new Date());
 
   if (!isVisible || daysLeft <= 0) return null;

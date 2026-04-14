@@ -63,26 +63,42 @@ export default {
       },
       keyframes: {
         "accordion-down": {
-          from: {
-            height: "0",
-          },
-          to: {
-            height: "var(--radix-accordion-content-height)",
-          },
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
         },
         "accordion-up": {
-          from: {
-            height: "var(--radix-accordion-content-height)",
-          },
-          to: {
-            height: "0",
-          },
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "chrome-shine": {
+          "0%":   { backgroundPosition: "-200% center" },
+          "100%": { backgroundPosition: "200% center" },
+        },
+        "iridescent": {
+          "0%,100%": { borderColor: "hsl(0 85% 50%)" },
+          "50%":     { borderColor: "hsl(45 100% 60%)" },
+        },
+        "letter-reveal": {
+          from: { opacity: "0", transform: "translateY(60px) skewY(8deg)", filter: "blur(6px)" },
+          to:   { opacity: "1", transform: "translateY(0) skewY(0deg)", filter: "blur(0)" },
+        },
+        "orb-drift": {
+          "0%,100%": { transform: "translate(0,0) scale(1)" },
+          "50%":     { transform: "translate(40px,-30px) scale(1.1)" },
+        },
+        "video-pulse": {
+          "0%,100%": { boxShadow: "0 0 30px hsl(0 85% 50% / 0.3)" },
+          "50%":     { boxShadow: "0 0 60px hsl(0 85% 50% / 0.6), 0 0 100px hsl(35 100% 55% / 0.3)" },
         },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
-        "accordion-up": "accordion-up 0.2s ease-out",
-        "spin-slow": "spin 8s linear infinite",
+        "accordion-up":   "accordion-up 0.2s ease-out",
+        "spin-slow":      "spin 8s linear infinite",
+        "chrome-shine":   "chrome-shine 4s linear infinite",
+        "letter-reveal":  "letter-reveal 0.6s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "orb-drift":      "orb-drift 20s ease-in-out infinite",
+        "video-pulse":    "video-pulse 3s ease-in-out infinite",
       },
     },
   },
