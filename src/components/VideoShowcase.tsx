@@ -1,3 +1,4 @@
+import type { RefObject } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import { Play } from "lucide-react";
 
@@ -17,7 +18,7 @@ const VideoShowcase = () => {
 
       <div className="container mx-auto max-w-4xl">
         <h2
-          ref={headingRef as React.RefObject<HTMLHeadingElement>}
+          ref={headingRef as RefObject<HTMLHeadingElement>}
           className="reveal text-4xl md:text-5xl font-orbitron font-bold text-center mb-4 chrome-text"
         >
           The Work
@@ -28,7 +29,7 @@ const VideoShowcase = () => {
 
         {/* Video frame */}
         <div
-          ref={frameRef as React.RefObject<HTMLDivElement>}
+          ref={frameRef as RefObject<HTMLDivElement>}
           className="reveal-scale glass-card-glow rounded-2xl overflow-hidden video-frame relative"
         >
           {isPlaceholder ? (

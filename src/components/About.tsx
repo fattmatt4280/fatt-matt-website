@@ -1,6 +1,6 @@
-import { useRef, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
+import type { RefObject } from "react";
 
 const stats = [
   { value: "24", suffix: "yrs", label: "In the Industry" },
@@ -21,7 +21,7 @@ const About = () => {
       <div className="container mx-auto max-w-4xl">
         {/* Main card */}
         <div
-          ref={sectionRef as React.RefObject<HTMLDivElement>}
+          ref={sectionRef as RefObject<HTMLDivElement>}
           className="reveal glass-card-glow rounded-2xl p-8 md:p-12 relative"
         >
           <div className="relative z-10">
@@ -37,7 +37,7 @@ const About = () => {
 
             {/* Stats */}
             <div
-              ref={statsRef as React.RefObject<HTMLDivElement>}
+              ref={statsRef as RefObject<HTMLDivElement>}
               className="reveal grid grid-cols-3 gap-4 mb-10"
             >
               {stats.map((stat, i) => (

@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import type { RefObject } from "react";
 import { useScrollReveal } from "@/hooks/useScrollReveal";
 import portfolio1 from "@/assets/portfolio-1.jpg";
 import colorworkImage from "@/assets/colorwork-portfolio.jpg";
@@ -23,7 +24,7 @@ const Portfolio = () => {
 
       <div className="container mx-auto">
         <h2
-          ref={headingRef as React.RefObject<HTMLHeadingElement>}
+          ref={headingRef as RefObject<HTMLHeadingElement>}
           className="reveal text-4xl md:text-5xl font-orbitron font-bold text-center mb-4 chrome-text"
         >
           Portfolio
@@ -33,7 +34,7 @@ const Portfolio = () => {
         </p>
 
         <div
-          ref={gridRef as React.RefObject<HTMLDivElement>}
+          ref={gridRef as RefObject<HTMLDivElement>}
           className="reveal grid md:grid-cols-2 gap-6 max-w-6xl mx-auto"
         >
           {portfolioItems.map((item, index) => (
