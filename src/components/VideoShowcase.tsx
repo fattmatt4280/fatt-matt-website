@@ -23,7 +23,7 @@ const VideoShowcase = () => {
           The Work
         </h2>
         <p className="reveal text-center text-muted-foreground mb-12 text-lg">
-          24 years. One reel.
+          26 years. One reel.
         </p>
 
         {/* Video frame */}
@@ -62,7 +62,7 @@ const VideoShowcase = () => {
         </div>
 
         <p className="text-center text-muted-foreground text-sm mt-6">
-          Montgomery IL &nbsp;•&nbsp; Portage IN &nbsp;•&nbsp; Clearwater FL
+          Largo FL &nbsp;•&nbsp; Revival Tattoo Collective
         </p>
       </div>
     </section>
