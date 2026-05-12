@@ -15,7 +15,7 @@ const Booking = () => {
     email: "",
     phone: "",
     message: "",
-    location: "Montgomery IL",
+    location: "Largo FL",
     bodyLocation: "",
     sessionLength: "half-day"
   });
@@ -293,9 +293,7 @@ const Booking = () => {
                     onChange={(e) => setFormData({ ...formData, location: e.target.value })}
                     className="w-full h-10 px-3 py-2 rounded-md bg-muted/50 border border-border text-foreground"
                   >
-                    <option value="Montgomery IL">Montgomery, IL</option>
-                    <option value="Portage IN">Portage, IN</option>
-                    <option value="Clearwater FL">Clearwater, FL</option>
+                    <option value="Largo FL">Revival Tattoo Collective — Largo, FL</option>
                   </select>
                 </div>
                 <div>
