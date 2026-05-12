@@ -11,8 +11,8 @@ const corsHeaders = {
 };
 
 const PRICE_IDS: Record<string, string> = {
-  'half-day': 'price_1SQUf0Rzfwe0oZX3bG0c8Q29',  // $100 — under 4hrs
-  'full-day': 'price_1TLqIhDiBqghYX9ibQqhPr5b',   // $200 — full day
+  'half-day': 'price_1TWGyFRzfwe0oZX3gVifyTX0', // $100
+  'full-day': 'price_1TWGywRzfwe0oZX3kFG2tJwu', // $200
 };
 
 interface CheckoutRequest {
@@ -23,7 +23,7 @@ interface CheckoutRequest {
   location: string;
   bodyLocation: string;
   consultType: string;
-  sessionLength: string;
+  sessionLength?: string;
 }
 
 const handler = async (req: Request): Promise<Response> => {
@@ -36,9 +36,8 @@ const handler = async (req: Request): Promise<Response> => {
 
     console.log('Creating checkout session for:', { name, email, phone, consultType, sessionLength });
 
-    const priceId = PRICE_IDS[sessionLength] || PRICE_IDS['half-day'];
+    const priceId = PRICE_IDS[sessionLength || 'half-day'] || PRICE_IDS['half-day'];
 
-    // Create Stripe checkout session
     const session = await stripe.checkout.sessions.create({
       line_items: [
         {
@@ -58,6 +57,7 @@ const handler = async (req: Request): Promise<Response> => {
         location,
         bodyLocation,
         consultType,
+        sessionLength: sessionLength || 'half-day',
       },
     });
 
