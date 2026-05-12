@@ -41,10 +41,10 @@ const Footer = () => {
           
           {/* Copyright */}
           <p className="text-muted-foreground text-center">
-            © 2025 Fatt Matt — Montgomery IL • Portage IN
+            © 2026 Fatt Matt — Revival Tattoo Collective • Largo FL
           </p>
           <p className="text-sm text-muted-foreground/60">
-            24 Years of Precision Artistry
+            26 Years of Precision Artistry
           </p>
         </div>
       </div>

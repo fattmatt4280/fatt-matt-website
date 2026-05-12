@@ -152,7 +152,7 @@ const Hero = () => {
             <p
               className="text-xl md:text-2xl text-foreground/80 mb-2 font-inter animate-[fade-in-up_0.6s_ease-out_0.8s_both]"
             >
-              Tattoo Artist &nbsp;•&nbsp; 24 Years of Precision Artistry
+              Color Realism &amp; Neon Pop Culture &nbsp;•&nbsp; 26 Years &nbsp;•&nbsp; Largo FL
             </p>
             <p
               className="text-lg md:text-xl font-inter animate-[fade-in-up_0.6s_ease-out_1s_both]"
@@ -163,7 +163,7 @@ const Hero = () => {
                 backgroundClip: "text",
               }}
             >
-              Montgomery IL &nbsp;•&nbsp; Portage IN
+              Largo FL &nbsp;•&nbsp; Revival Tattoo Collective
             </p>
           </div>
         </div>
