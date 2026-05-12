@@ -3,7 +3,7 @@ import { useScrollReveal } from "@/hooks/useScrollReveal";
 import type { RefObject } from "react";
 
 const stats = [
-  { value: "24", suffix: "yrs", label: "In the Industry" },
+  { value: "26", suffix: "yrs", label: "In the Industry" },
   { value: "3",  suffix: "",    label: "Active Locations" },
   { value: "10k", suffix: "+",  label: "Pieces Completed" },
 ];
@@ -30,7 +30,7 @@ const About = () => {
               I'm Fatt Matt — a tattooer obsessed with detail, flow, and healing.
               My approach fuses decades of technique with modern tools and aftercare science.
               Every piece is crafted with precision, passion, and a commitment to excellence
-              that comes from 24 years in the industry.
+              that comes from 26 years in the industry.
             </p>
 
             {/* Stats */}

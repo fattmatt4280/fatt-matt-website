@@ -52,6 +52,8 @@ interface LocationRegistration {
 }
 
 const LOCATION_LABELS: Record<string, string> = {
+  "largo-fl": "Revival Tattoo Collective — Largo, FL",
+  // Legacy labels kept so historical registrations still display correctly
   "montgomery-il": "Montgomery, IL",
   "portage-in": "Portage, IN",
   "clearwater-fl": "Clearwater, FL",

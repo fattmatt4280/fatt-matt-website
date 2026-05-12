@@ -8,9 +8,7 @@ import { toast } from "sonner";
 import { MapPin, Check } from "lucide-react";
 
 const locations = [
-  { id: "montgomery-il", label: "Montgomery, IL", state: "Illinois" },
-  { id: "portage-in", label: "Portage, IN", state: "Indiana" },
-  { id: "clearwater-fl", label: "Clearwater, FL", state: "Florida" },
+  { id: "largo-fl", label: "Revival Tattoo Collective — Largo, FL", state: "Florida" },
 ];
 
 const LocationRegistration = () => {
