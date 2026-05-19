@@ -100,7 +100,7 @@ function InkParticles() {
 // Staggered letter reveal
 function AnimatedTitle({ text }: { text: string }) {
   return (
-    <h1 className="text-6xl md:text-8xl lg:text-9xl font-orbitron font-bold mb-4 overflow-hidden">
+    <h1 className="text-5xl sm:text-6xl md:text-8xl lg:text-9xl font-orbitron font-bold mb-4 overflow-hidden whitespace-nowrap">
       {text.split("").map((char, i) => (
         <span
           key={i}
