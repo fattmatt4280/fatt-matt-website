@@ -42,6 +42,11 @@ const Contests = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <SEO
+        title="Tattoo Contests & Giveaways — Fatt Matt"
+        description="Enter active contests and giveaways from Fatt Matt — win tattoo credit, sessions, and merch from Revival Tattoo Collective."
+        path="/contests"
+      />
       <Navigation />
       
       <section className="py-20 px-4">

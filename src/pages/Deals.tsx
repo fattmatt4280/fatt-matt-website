@@ -39,6 +39,11 @@ const Deals = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <SEO
+        title="Tattoo Deals & Specials — Fatt Matt | Largo FL"
+        description="Current tattoo specials, flash deals, and referral discounts from Fatt Matt at Revival Tattoo Collective in Largo FL."
+        path="/deals"
+      />
       <Navigation />
       
       <section className="py-20 px-4">

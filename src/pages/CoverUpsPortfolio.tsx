@@ -23,6 +23,11 @@ const CoverUpsPortfolio = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Cover-Up Tattoo Portfolio — Fatt Matt"
+        description="Tattoo cover-up transformations by Fatt Matt — turning old ink into new artwork at Revival Tattoo Collective, Largo FL."
+        path="/portfolio/cover-ups"
+      />
       <header className="py-8 px-4 border-b border-primary/20">
         <div className="container mx-auto">
           <Link to="/#portfolio">
