@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 
@@ -33,6 +34,11 @@ const Blog = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <SEO
+        title="Ink Stories Blog — Fatt Matt Tattoo"
+        description="Tattoo aftercare guides, design tips, and artist insights from Fatt Matt — 26 years of color realism tattooing in Largo FL."
+        path="/blog"
+      />
       <Navigation />
       
       <section className="py-20 px-4">

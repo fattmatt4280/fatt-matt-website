@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const BlackGreyPortfolio = () => {
   const { data: portfolioItems, isLoading } = useQuery({
@@ -22,6 +23,11 @@ const BlackGreyPortfolio = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Black & Grey Tattoo Portfolio — Fatt Matt"
+        description="Black and grey realism tattoo gallery by Fatt Matt — fine line shading, portraits, and detailed monochrome work in Largo FL."
+        path="/portfolio/black-grey"
+      />
       <header className="py-8 px-4 border-b border-primary/20">
         <div className="container mx-auto">
           <Link to="/#portfolio">

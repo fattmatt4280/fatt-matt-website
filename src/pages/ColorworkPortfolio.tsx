@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 
 const ColorworkPortfolio = () => {
   const { data: portfolioItems, isLoading } = useQuery({
@@ -22,6 +23,11 @@ const ColorworkPortfolio = () => {
 
   return (
     <div className="min-h-screen bg-background">
+      <SEO
+        title="Colorwork Tattoo Portfolio — Fatt Matt"
+        description="Vibrant color realism, traditional, neo-traditional, and watercolor tattoos by Fatt Matt at Revival Tattoo Collective, Largo FL."
+        path="/portfolio/colorwork"
+      />
       <header className="py-8 px-4 border-b border-primary/20">
         <div className="container mx-auto">
           <Link to="/#portfolio">

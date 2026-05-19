@@ -1,5 +1,6 @@
 import Navigation from "@/components/Navigation";
 import Footer from "@/components/Footer";
+import SEO from "@/components/SEO";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -41,6 +42,11 @@ const Contests = () => {
 
   return (
     <main className="min-h-screen bg-background">
+      <SEO
+        title="Tattoo Contests & Giveaways — Fatt Matt"
+        description="Enter active contests and giveaways from Fatt Matt — win tattoo credit, sessions, and merch from Revival Tattoo Collective."
+        path="/contests"
+      />
       <Navigation />
       
       <section className="py-20 px-4">

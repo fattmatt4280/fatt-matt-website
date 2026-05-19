@@ -1,0 +1,14 @@
+# Fatt Matt — Color Realism Tattoo Artist
+
+> 26 years of color realism and neon pop culture tattooing at Revival Tattoo Collective in Largo, FL.
+
+## Pages
+
+- [Home](/): About Fatt Matt, portfolio highlights, booking, aftercare.
+- [Black & Grey Portfolio](/portfolio/black-grey): Black and grey tattoo work.
+- [Colorwork Portfolio](/portfolio/colorwork): Vibrant color realism tattoos.
+- [Portraits Portfolio](/portfolio/portraits): Portrait tattoo gallery.
+- [Cover-Ups Portfolio](/portfolio/cover-ups): Cover-up transformations.
+- [Blog](/blog): Tattoo tips, aftercare, and artist insights.
+- [Deals](/deals): Current specials and promotions.
+- [Contests](/contests): Active tattoo contests and giveaways.

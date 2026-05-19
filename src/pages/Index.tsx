@@ -8,10 +8,16 @@ import AftercarePage from "@/components/AftercarePage";
 import Footer from "@/components/Footer";
 import Navigation from "@/components/Navigation";
 import AnnouncementBanner from "@/components/AnnouncementBanner";
+import SEO from "@/components/SEO";
 
 const Index = () => {
   return (
     <main className="min-h-screen bg-background">
+      <SEO
+        title="Fatt Matt — Color Realism Tattoo Artist | Largo FL"
+        description="26 years of color realism & neon pop culture tattooing. Now at Revival Tattoo Collective, Largo FL. Book your consultation."
+        path="/"
+      />
       <Navigation />
       <AnnouncementBanner />
       <Hero />

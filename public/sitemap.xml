@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://fatt-matt-website.lovable.app/</loc><changefreq>weekly</changefreq><priority>1.0</priority></url>
+  <url><loc>https://fatt-matt-website.lovable.app/portfolio/black-grey</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fatt-matt-website.lovable.app/portfolio/colorwork</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fatt-matt-website.lovable.app/portfolio/portraits</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fatt-matt-website.lovable.app/portfolio/cover-ups</loc><changefreq>monthly</changefreq><priority>0.8</priority></url>
+  <url><loc>https://fatt-matt-website.lovable.app/blog</loc><changefreq>weekly</changefreq><priority>0.7</priority></url>
+  <url><loc>https://fatt-matt-website.lovable.app/deals</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+  <url><loc>https://fatt-matt-website.lovable.app/contests</loc><changefreq>weekly</changefreq><priority>0.6</priority></url>
+</urlset>
