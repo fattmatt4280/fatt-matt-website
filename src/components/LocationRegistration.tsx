@@ -23,14 +23,18 @@ const LocationRegistration = () => {
     setIsSubmitting(true);
 
     try {
-      const { error } = await supabase.from("location_registrations").insert({
-        name: formData.name.trim(),
-        email: formData.email.trim(),
-        phone: formData.phone.trim() || null,
-        location: selectedLocation,
+      const { data, error } = await supabase.functions.invoke("register-location", {
+        body: {
+          name: formData.name.trim(),
+          email: formData.email.trim(),
+          phone: formData.phone.trim() || null,
+          location: selectedLocation,
+        },
       });
 
       if (error) throw error;
+      if (data?.error) throw new Error(data.error);
+
 
       // Send confirmation email (fire-and-forget)
       supabase.functions.invoke('send-registration-email', {
